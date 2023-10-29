@@ -91,7 +91,7 @@ _For more examples, please refer to the [Documentation](./docs)_
 - [ ] Test the project with one step
 - [ ] Documentation 
 
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/VikStoykov/DevOps-Upskill-23/issues?q=is%3Aopen+is%3Aissue) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
