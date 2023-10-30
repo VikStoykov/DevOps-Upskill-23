@@ -31,11 +31,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This is my main repository for 'Telerik DevOps-Upskill program 2023'. Here you can find my homeworks and main project.
+This is my main repository for 'Telerik DevOps-Upskill program 2023'.
 
 Banches:
 * main
-* homeworks- where you can find all homeworks
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -50,7 +49,7 @@ Here you can find all tools and languages that are used in this project.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-If you want to run one of examples in 'homeworks', go to 'homeworks' repo and read instructions.
+If you want to run one of examples in 'homeworks', go to 'homeworks' directory and read instructions.
 
 ### Prerequisites
 

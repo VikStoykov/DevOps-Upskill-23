@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./lecture4-containers/Dockerfile
+          file: ./homeworks/lecture4-containers/Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/lecture2-homework:latest, ${{ secrets.DOCKERHUB_USERNAME }}/lecture2-homework:${{ github.run_number }}
