@@ -11,6 +11,9 @@ Created with draw.io
 Do the Demo content in https://github.com/severel/telerik-devops-course/
 
 ### lecture4-devops-programme
+Original source code: https://github.com/vutoff/devops-programme
+My pull request: https://github.com/vutoff/devops-programme/pull/11
+
 ```bash
 $ sudo docker build -t test:v0.1 .
 
