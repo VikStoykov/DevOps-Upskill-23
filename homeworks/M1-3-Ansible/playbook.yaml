@@ -1,0 +1,24 @@
+- hosts: localhost
+  # Collectd facts- no
+  gather_facts: false
+  # Don't assume another user(become creates sudo if yes)
+  become: false
+
+  vars:
+    app_host: "0.0.0.0"
+    listen_port: "5000"
+    image_name: vikstoykov/python-app
+    image_tag: v0.1
+
+  roles:
+  # - role: roles/app
+  #   vars:
+  #     repo_name: "VikStoykov/DevOps-Upskill-23"
+  #     branch_name: "main"
+
+  - role: roles/build
+    vars:
+      repo_name: "VikStoykov/DevOps-Upskill-23"
+      branch_name: "main"
+
+

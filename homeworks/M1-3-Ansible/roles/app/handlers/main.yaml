@@ -1,0 +1,7 @@
+- name: curl-webserver
+  shell: "curl http://localhost:{{ listen_port }}"
+
+- name: restart-webserver
+  systemd:
+    name: apache2
+    state: restarted

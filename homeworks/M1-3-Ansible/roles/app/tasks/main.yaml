@@ -1,0 +1,33 @@
+---
+- name: Block
+  block:
+    - name: Create code directory
+      file:
+        dest: "{{ code_directory }}"
+        state: directory
+
+    - name: Get latest app code from GitHub
+      git:
+        repo: "git@github.com:{{ repo_name }}"
+        version: "{{ branch_name }}"
+        dest: "{{ code_directory }}"
+      notify:
+        - curl-webserver
+
+    - name: Install Python libraries for app
+      pip:
+        chdir: "{{ code_directory }}/homeworks/lecture4-devops-programme/"
+        requirements: "requirements.txt"
+        state: present
+        virtualenv_command: "pyenv"
+
+    - name: Start the Flask app
+      shell: "flask run -h {{ app_host }} -p {{ listen_port }} &"
+      args:
+        chdir: "{{ code_directory }}/homeworks/lecture4-devops-programme/app"
+
+  rescue:
+    - name: Delete code directory
+      file:
+        dest: "{{ code_directory }}"
+        state: absent

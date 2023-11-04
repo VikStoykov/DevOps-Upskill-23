@@ -44,10 +44,61 @@ Hello, World!
 
 ### lecture4-containers
 #### Requirement
-_Create an index.html file._
-_Create a Dockerfile that is based on nginx:1.20-alpine_
-_Copy the index.html file to the new nginx container_
-_Create a public image repository in docker hub_
-_Create a GitHub Actions workflow that builds the container and uploads the image to the repository_
+_1. Create an index.html file._<br />
+_2. Create a Dockerfile that is based on nginx:1.20-alpine_<br />
+_3. Copy the index.html file to the new nginx container_<br />
+_4. Create a public image repository in docker hub_<br />
+_5. Create a GitHub Actions workflow that builds the container and uploads the image to the repository_
 
 Builder: [![Build and push image to DockerHub for L4 Homework](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml)
+
+### M1-3-Ansible
+More info in [README.md] in M1-3-Ansible folder(https://github.com/VikStoykov/DevOps-Upskill-23/tree/main/homeworks/M1-3-Ansible)
+
+#### Requirement
+Ansible, docker-py, flask (from requirements.txt) and authentication for DockerHub and GitHub via ssh. <br\>You can install requirements with pip install -r <i>requirements.txt</i> or manually for every packet.<br/>Builded image: https://hub.docker.com/r/vikstoykov/python-app/tags
+
+#### How to run it:
+ansible-playbook playbook.yaml
+```
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [localhost] ********************************************************************************************************************************
+TASK [roles/build : Create code directory] ******************************************************************************************************
+changed: [localhost]
+
+TASK [roles/build : Get latest app code from GitHub] ********************************************************************************************
+changed: [localhost]
+
+TASK [roles/build : Build "vikstoykov/python-app:v0.1" image] ***********************************************************************************
+changed: [localhost]
+
+TASK [roles/build : Push "vikstoykov/python-app:v0.1" to docker hub] ****************************************************************************
+changed: [localhost]
+
+TASK [roles/build : Run container] **************************************************************************************************************
+changed: [localhost]
+
+TASK [roles/build : Test container] *************************************************************************************************************
+changed: [localhost]
+
+TASK [roles/build : debug] **********************************************************************************************************************
+ok: [localhost] => {
+    "command_output.stdout_lines": [
+        "Hello, World!"
+    ]
+}
+
+TASK [roles/build : Remove container] ***********************************************************************************************************
+changed: [localhost]
+
+TASK [roles/build : Remove "vikstoykov/python-app:v0.1" image] **********************************************************************************
+changed: [localhost]
+
+TASK [roles/build : Delete code directory] ******************************************************************************************************
+changed: [localhost]
+
+PLAY RECAP **************************************************************************************************************************************
+localhost                  : ok=10   changed=9    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
