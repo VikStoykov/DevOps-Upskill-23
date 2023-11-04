@@ -4,13 +4,15 @@
 This is folder with all homeworks. For every homework you can find detailed information how to run it.
 
 ## How to run homework
-### lecture2-SDLC
+### 1. lecture2-SDLC
 Created with draw.io
+( --- )
 
-### lecture3-microservices
+### 2. lecture3-microservices
 Do the Demo content in https://github.com/severel/telerik-devops-course/
+( --- )
 
-### lecture4-devops-programme
+### 3. lecture4-devops-programme
 Original source code: https://github.com/vutoff/devops-programme
 My pull request: https://github.com/vutoff/devops-programme/pull/11
 
@@ -41,8 +43,9 @@ tcp        0      0 0.0.0.0:5000            0.0.0.0:*               LISTEN      
 $ curl http://127.0.0.1:5000/
 Hello, World!
 ```
+( --- )
 
-### lecture4-containers
+### 4. lecture4-containers
 #### Requirement
 _1. Create an index.html file._<br />
 _2. Create a Dockerfile that is based on nginx:1.20-alpine_<br />
@@ -51,9 +54,10 @@ _4. Create a public image repository in docker hub_<br />
 _5. Create a GitHub Actions workflow that builds the container and uploads the image to the repository_
 
 Builder: [![Build and push image to DockerHub for L4 Homework](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml)
+( --- )
 
-### M1-3-Ansible
-More info in [README.md] in M1-3-Ansible folder(https://github.com/VikStoykov/DevOps-Upskill-23/tree/main/homeworks/M1-3-Ansible)
+### 5. M1-3-Ansible
+More info in [README.md](https://github.com/VikStoykov/DevOps-Upskill-23/tree/main/homeworks/M1-3-Ansible) in M1-3-Ansible folder
 
 #### Requirement
 Ansible, docker-py, flask (from requirements.txt) and authentication for DockerHub and GitHub via ssh. <br\>You can install requirements with pip install -r <i>requirements.txt</i> or manually for every packet.<br/>Builded image: https://hub.docker.com/r/vikstoykov/python-app/tags
