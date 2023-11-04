@@ -11,4 +11,4 @@ def hello_world():
 
 
 if __name__ == "__main__":
-    app.run(port=os.environ.get("PORT", 5000))
+    app.run(port=os.environ.get("0.0.0.0", 5000))
