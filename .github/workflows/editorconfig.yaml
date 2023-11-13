@@ -3,7 +3,7 @@ name: EditorConfig Checker
 on:
   push:
     branches:
-      - main
+      - lab2
 
 jobs:
   editorconfig:
