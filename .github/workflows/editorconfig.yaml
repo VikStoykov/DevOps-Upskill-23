@@ -29,6 +29,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pylint
+          pip install -r 'homeworks/lecture4-devops-programme/requirements.txt'
       - name: Analysing the code with pylint
         run: |
-          pylint $(git ls-files 'homeworks/lecture4-devops-programme/app/*.py')
+          pylint --rcfile=pylintrc $(git ls-files 'homeworks/lecture4-devops-programme/app/*.py')
