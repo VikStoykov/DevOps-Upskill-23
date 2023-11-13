@@ -6,11 +6,11 @@ This is folder with all homeworks. For every homework you can find detailed info
 ## How to run homework
 ### 1. lecture2-SDLC
 Created with draw.io
-( --- )
+***
 
 ### 2. lecture3-microservices
 Do the Demo content in https://github.com/severel/telerik-devops-course/
-( --- )
+***
 
 ### 3. lecture4-devops-programme
 Original source code: https://github.com/vutoff/devops-programme
@@ -43,7 +43,7 @@ tcp        0      0 0.0.0.0:5000            0.0.0.0:*               LISTEN      
 $ curl http://127.0.0.1:5000/
 Hello, World!
 ```
-( --- )
+***
 
 ### 4. lecture4-containers
 #### Requirement
@@ -54,7 +54,7 @@ _4. Create a public image repository in docker hub_<br />
 _5. Create a GitHub Actions workflow that builds the container and uploads the image to the repository_
 
 Builder: [![Build and push image to DockerHub for L4 Homework](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml)
-( --- )
+***
 
 ### 5. M1-3-Ansible
 More info in [README.md](https://github.com/VikStoykov/DevOps-Upskill-23/tree/main/homeworks/M1-3-Ansible) in M1-3-Ansible folder
