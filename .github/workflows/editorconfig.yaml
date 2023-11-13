@@ -31,4 +31,4 @@ jobs:
           pip install pylint
       - name: Analysing the code with pylint
         run: |
-          pylint $(git ls-files '/homeworks/lecture4-devops-programme/app/*.py')
+          pylint $(git ls-files 'homeworks/lecture4-devops-programme/app/*.py')
