@@ -32,4 +32,4 @@ jobs:
           pip install -r 'homeworks/lecture4-devops-programme/requirements.txt'
       - name: Analysing the code with pylint
         run: |
-          pylint --rcfile=pylintrc $(git ls-files 'homeworks/lecture4-devops-programme/app/*.py')
+          pylint --rcfile='homeworks/lecture4-devops-programme/pylintrc' $(git ls-files 'homeworks/lecture4-devops-programme/app/*.py')
