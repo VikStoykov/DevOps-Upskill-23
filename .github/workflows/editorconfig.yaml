@@ -66,14 +66,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - run: echo "✔ SCA - Snyk; review security issues"
-      - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/python@master
+      - uses: snyk/actions/setup@master
+      - name: Snyk monitor 
+        run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          working-directory: './homeworks/lecture4-devops-programme/app/'
-        with:
-          # If you want to send data to Snyk, and be alerted when new vulnerabilities are discovered
-          command: monitor
 
       # - run: echo "✔ Build a Docker image. Use Git commit SHA as an Image tag."
       # - name: Build Docker image
