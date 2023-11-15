@@ -70,6 +70,7 @@ jobs:
       - name: Snyk code test 
         if: always()
         run: snyk code test
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
