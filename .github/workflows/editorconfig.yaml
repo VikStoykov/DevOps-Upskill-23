@@ -1,0 +1,148 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - lab2
+
+jobs:
+    unit-test:
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          python-version: ["3.11"]
+      steps:
+      - run: echo "✔ Checkout code"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: echo "✔ Setup python"
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - run: echo "✔ Install all dependencies"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint
+          pip install black
+          pip install -r 'homeworks/lecture4-devops-programme/requirements.txt'
+
+      - name: Run EditorConfig Checker
+        uses: editorconfig-checker/action-editorconfig-checker@main
+
+      - run: echo "✔ Code Lint and style - use pylint and black to check for style/formatting/syntax errors"
+      - name: Analysing the code with pylint
+        run: |
+          pylint --rcfile='homeworks/lecture4-devops-programme/pylintrc' $(git ls-files 'homeworks/lecture4-devops-programme/app/*.py')
+      
+      - run: echo "✔ Check makrdown files markdownlint-cli"
+      - name: Lint with Markdown-lint
+        uses: articulate/actions-markdownlint@v1
+        with:
+          files: 'homeworks/lecture4-devops-programme/*.md'
+          ignore: node_modules
+          #version: 0.28.1
+
+      - run: echo "✔ Code Unittest"
+      - name: Execute unit-test
+        run: |
+          cd 'homeworks/lecture4-devops-programme/app/'
+          python3 -m unittest app_test.py
+
+      - run: echo "✔ Check for hardcoded secrets"
+      - name: Perform gitleaks
+        uses: zricethezav/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # with:
+        #   args: --path .
+
+    security-sonar-test:
+      runs-on: ubuntu-latest
+      needs: unit-test
+      steps:
+      - run: echo "✔ Checkout code"
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - run: echo "✔ SAST - SonarCloud; Review code smells and security issues"
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    security-snyk-test:
+      runs-on: ubuntu-latest
+      needs: unit-test
+      steps:
+      - run: echo "✔ Checkout code"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: echo "✔ SCA - Snyk; review security issues"
+      - uses: snyk/actions/setup@master
+      - name: Snyk code test 
+        #if: always()
+        # The Snyk Code configuration issues do not use the critical severity level
+        run: snyk code test --severity-threshold=high
+        #continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+    build:
+      runs-on: ubuntu-latest
+      needs: [security-sonar-test, security-snyk-test]
+      steps:
+      - run: echo "✔ Checkout code"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: echo "✔ Build a Docker image. Use Git commit SHA as an Image tag."
+      - name: Build Docker image
+        # run: |
+        # docker build -t docker.io/my-organization/my-app:${{ github.sha }} .
+        uses: docker/build-push-action@v5
+        with:
+          context: ./homeworks/lecture4-devops-programme/
+          file: ./homeworks/lecture4-devops-programme/Dockerfile
+          platforms: linux/amd64
+          push: false
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lab2:${{ github.sha }}
+
+      - run: echo "✔ Scan the built image with Trivy"
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/lab2:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+    deploy:
+      runs-on: ubuntu-latest
+      needs: build
+      steps:
+      - run: echo "✔ Checkout code"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - run: echo "✔ Push the built image to your Docker HUB account"
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./homeworks/lecture4-devops-programme/
+          file: ./homeworks/lecture4-devops-programme/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lab2:${{ github.sha }}

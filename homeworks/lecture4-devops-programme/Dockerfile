@@ -1,14 +1,19 @@
 FROM ubuntu:22.04
-RUN useradd -u 1001 testuser
+
 RUN apt-get update \
-    && apt-get install python3 python3-pip -y \
-    && mkdir /app/ \
-    && mkdir /req/
-ADD requirements.txt /req/
-RUN pip install -r /req/requirements.txt
-ADD app /app
-EXPOSE 5000
-# Use this user here, because of permissions
-USER testuser
-ENTRYPOINT ["python3"]
-CMD ["/app/app.py"]
+      && apt-get install -y --no-install-recommends \
+       python3 \
+       python3-pip \
+      && mkdir -p /app \
+      && useradd -d /app -s /bin/bash app \
+      && chown -R app:app /app
+
+COPY requirements.txt /app/requirements.txt
+RUN pip3 install -r /app/requirements.txt
+
+COPY app/app.py /app
+WORKDIR /app
+
+USER app
+
+CMD ["python3", "app.py"]
