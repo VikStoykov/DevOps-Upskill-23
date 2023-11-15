@@ -83,9 +83,10 @@ jobs:
       - run: echo "✔ SCA - Snyk; review security issues"
       - uses: snyk/actions/setup@master
       - name: Snyk code test 
-        if: always()
-        run: snyk code test --severity-threshold=critical
-        continue-on-error: true
+        #if: always()
+        # The Snyk Code configuration issues do not use the critical severity level
+        run: snyk code test --severity-threshold=high
+        #continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
