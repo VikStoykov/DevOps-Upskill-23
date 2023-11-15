@@ -46,19 +46,10 @@ jobs:
           ignore: node_modules
           #version: 0.28.1
 
-    test:
-      #needs: build
-      runs-on: ubuntu-latest
-      steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
       - run: echo "✔ Code Unittest"
       - name: Execute unit-test
         run: |
-          pwd
-          ls -la
           cd 'homeworks/lecture4-devops-programme/app/'
-          ls -la
           python3 -m unittest app_test.py
 
       - run: echo "✔ Check for hardcoded secrets"
@@ -67,8 +58,8 @@ jobs:
         with:
           args: --path .
 
-      # - name: SonarCloud Scan
-      #   uses: sonarsource/sonarcloud-github-action@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
