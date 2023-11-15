@@ -47,13 +47,14 @@ jobs:
           #version: 0.28.1
 
     test:
-      #needs: build
+      needs: build
       runs-on: ubuntu-latest
       steps:
       - run: echo "✔ Code Unittest"
       - name: Execute unit-test
         run: |
           pwd
+          ls ./
           cd 'homeworks/'
           pwd
           python3 -m unittest app_test.py
