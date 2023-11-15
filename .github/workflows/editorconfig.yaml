@@ -54,7 +54,7 @@ jobs:
       - name: Execute unit-test
         run: |
           pwd
-          cd './homeworks/lecture4-devops-programme/app/'
+          cd 'homeworks/lecture4-devops-programme/app/'
           python3 -m unittest app_test.py
 
       - run: echo "✔ Check for hardcoded secrets"
