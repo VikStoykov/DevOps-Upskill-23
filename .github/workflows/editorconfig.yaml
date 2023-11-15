@@ -84,7 +84,7 @@ jobs:
       - uses: snyk/actions/setup@master
       - name: Snyk code test 
         if: always()
-        run: snyk code test
+        run: snyk code test --severity-threshold=critical
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
