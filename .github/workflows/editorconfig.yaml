@@ -5,14 +5,6 @@ on:
     branches:
       - lab2
 
-#jobs:
-#   editorconfig:
-#     runs-on: ubuntu-20.04
-#     steps:
-#       - uses: actions/checkout@v2
-#       - uses: editorconfig-checker/action-editorconfig-checker@main
-#       - run: editorconfig-checker
-
 jobs:
     build:
       runs-on: ubuntu-latest
@@ -20,16 +12,51 @@ jobs:
         matrix:
           python-version: ["3.11"]
       steps:
-      - uses: actions/checkout@v3
+      - run: echo "✔ Check .editorconfig"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: echo "✔ Setup python"
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
+
+      - run: echo "✔ Install all dependencies"
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pylint
+          pip install black
           pip install -r 'homeworks/lecture4-devops-programme/requirements.txt'
+
+      - name: Run EditorConfig Checker
+        uses: editorconfig-checker/action-editorconfig-checker@main
+
+      - run: echo "✔ Code Lint and style - use pylint and black to check for style/formatting/syntax errors"
       - name: Analysing the code with pylint
         run: |
           pylint --rcfile='homeworks/lecture4-devops-programme/pylintrc' $(git ls-files 'homeworks/lecture4-devops-programme/app/*.py')
+      
+      - run: echo "✔ Check makrdown files markdownlint-cli"
+      - name: Lint with Markdown-lint
+        uses: articulate/actions-markdownlint@v1
+        with:
+          files: 'homeworks/lecture4-devops-programme/*.md'
+          ignore: node_modules
+          #version: 0.28.1
+
+    test:
+      runs-on: ubuntu-latest
+      steps:
+      - run: echo "✔ Code Unittest"
+      - name: Execute unit-test
+        run: |
+          cd 'homeworks/lecture4-devops-programme/app/'
+          python -m unittest app_test.py
+
+      - run: echo "✔ Check for hardcoded secrets"
+      - name: Perform gitleaks
+        uses: zricethezav/gitleaks-action@v2
+        with:
+          args: --path .
