@@ -67,12 +67,12 @@ jobs:
 
       - run: echo "✔ SCA - Snyk; review security issues"
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/node@master
+        uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        # with:
-        #   # If you want to send data to Snyk, and be alerted when new vulnerabilities are discovered
-        #   command: monitor
+        with:
+          # If you want to send data to Snyk, and be alerted when new vulnerabilities are discovered
+          command: monitor
 
       # - run: echo "✔ Build a Docker image. Use Git commit SHA as an Image tag."
       # - name: Build Docker image
