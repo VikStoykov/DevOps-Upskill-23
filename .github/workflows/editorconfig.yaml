@@ -54,7 +54,7 @@ jobs:
       - name: Execute unit-test
         run: |
           pwd
-          cd '/home/runner/work/DevOps-Upskill-23/DevOps-Upskill-23/homeworks/lecture4-devops-programme/app/'
+          cd '/home/runner/work/DevOps-Upskill-23/homeworks/lecture4-devops-programme/app/'
           python3 -m unittest app_test.py
 
       - run: echo "✔ Check for hardcoded secrets"
@@ -62,3 +62,9 @@ jobs:
         uses: zricethezav/gitleaks-action@v2
         with:
           args: --path .
+
+      # - name: SonarCloud Scan
+      #   uses: sonarsource/sonarcloud-github-action@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
