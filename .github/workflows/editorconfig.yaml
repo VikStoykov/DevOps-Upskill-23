@@ -68,7 +68,7 @@ jobs:
       - run: echo "✔ SCA - Snyk; review security issues"
       - uses: snyk/actions/setup@master
       - name: Snyk monitor 
-        run: snyk test --all-projects --detection-depth=5
+        run: snyk code test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
