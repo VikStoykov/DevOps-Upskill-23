@@ -52,8 +52,7 @@ jobs:
       - run: echo "✔ Code Unittest"
       - name: Execute unit-test
         run: |
-          cd './homeworks/lecture4-devops-programme/app/'
-          python -m unittest app_test.py
+          python -m unittest ./homeworks/lecture4-devops-programme/app/app_test.py
 
       - run: echo "✔ Check for hardcoded secrets"
       - name: Perform gitleaks
