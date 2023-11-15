@@ -12,9 +12,9 @@ jobs:
         matrix:
           python-version: ["3.11"]
       steps:
-      # - run: echo "✔ Check .editorconfig"
-      # - name: Checkout code
-      #   uses: actions/checkout@v3
+      - run: echo "✔ Checkout code"
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       # - run: echo "✔ Setup python"
       # - name: Set up Python ${{ matrix.python-version }}
