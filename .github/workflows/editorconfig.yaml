@@ -79,16 +79,16 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./lecture4-devops-programme/Dockerfile
+          file: ./homeworks/lecture4-devops-programme/Dockerfile
           platforms: linux/amd64
           push: false
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lecture2-homework:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lab2:${{ github.sha }}
 
       - run: echo "✔ Scan the built image with Trivy"
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/lecture2-homework:${{ github.sha }}'
+          image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/lab2:${{ github.sha }}'
           format: 'table'
           exit-code: '1'
           ignore-unfixed: true
