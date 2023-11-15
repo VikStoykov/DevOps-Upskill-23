@@ -6,7 +6,7 @@ RUN apt-get update \
     && mkdir /req/
 ADD requirements.txt /req/
 RUN pip install -r /req/requirements.txt
-ADD app /app
+ADD app ./homeworks/lecture4-devops-programme/app
 EXPOSE 5000
 # Use this user here, because of permissions
 USER testuser
