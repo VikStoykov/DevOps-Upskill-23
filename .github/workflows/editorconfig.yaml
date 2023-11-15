@@ -70,6 +70,7 @@ jobs:
         uses: snyk/actions/python@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          working-directory: './homeworks/lecture4-devops-programme/app/'
         with:
           # If you want to send data to Snyk, and be alerted when new vulnerabilities are discovered
           command: monitor
