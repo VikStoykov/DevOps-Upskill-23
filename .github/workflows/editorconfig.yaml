@@ -70,6 +70,16 @@ jobs:
         uses: snyk/actions/node@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          # If you want to send data to Snyk, and be alerted when new vulnerabilities are discovered
-          command: monitor
+        # with:
+        #   # If you want to send data to Snyk, and be alerted when new vulnerabilities are discovered
+        #   command: monitor
+
+      # - run: echo "✔ Build a Docker image. Use Git commit SHA as an Image tag."
+      # - name: Build Docker image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ./lecture4-devops-programme/Dockerfile
+      #     platforms: linux/amd64
+      #     push: false
+      #     tags: ${{ secrets.DOCKERHUB_USERNAME }}/lecture4-devops-programme:latest, ${{ secrets.DOCKERHUB_USERNAME }}/lecture2-homework:$(git rev-parse --short "$GITHUB_SHA")
