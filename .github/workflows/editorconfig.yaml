@@ -47,15 +47,14 @@ jobs:
           #version: 0.28.1
 
     test:
-      needs: build
+      #needs: build
       runs-on: ubuntu-latest
       steps:
       - run: echo "✔ Code Unittest"
       - name: Execute unit-test
         run: |
           pwd
-          ls
-          cd 'homeworks/lecture4-devops-programme/app/'
+          cd '/home/runner/work/DevOps-Upskill-23/DevOps-Upskill-23/homeworks/lecture4-devops-programme/app/'
           python3 -m unittest app_test.py
 
       - run: echo "✔ Check for hardcoded secrets"
