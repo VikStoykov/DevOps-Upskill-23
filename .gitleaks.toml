@@ -1,0 +1,14 @@
+# Title for the gitleaks configuration file.
+title = "Gitleaks title"
+
+# You can include an allowlist table for a single rule to reduce false positives or ignore commits
+# with known/rotated secrets
+[rules.allowlist]
+# note: (rule) regexTarget defaults to check the _Secret_ in the finding.
+# if regexTarget is not specified then _Secret_ will be used.
+# Acceptable values for regexTarget are "match" and "line"
+regexTarget = "match"
+regexes = [
+  '''sonar.organization''',
+  '''sonar.projectKey''',
+]
