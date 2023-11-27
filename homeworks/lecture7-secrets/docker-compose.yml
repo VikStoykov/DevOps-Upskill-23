@@ -28,6 +28,7 @@ services:
     depends_on:
       - "db"
   vault-client:
+    privileged: true
     build: .
     environment:
       VAULT_ADDR: "http://vault-server:8200"

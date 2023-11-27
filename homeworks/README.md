@@ -106,3 +106,64 @@ changed: [localhost]
 PLAY RECAP **************************************************************************************************************************************
 localhost                  : ok=10   changed=9    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ```
+
+### 6. lecture7-secrets
+More info in [README.md](https://github.com/VikStoykov/DevOps-Upskill-23/tree/main/homeworks/lecture7-secrets) in lecture7-secrets folder
+
+#### Requirement
+Docker compose. To install it, see demo in: https://docs.docker.com/compose/install/standalone/
+```
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.23.3/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 56.9M  100 56.9M    0     0  54.4M      0  0:00:01  0:00:01 --:--:--  109M
+
+sudo chmod 777 /usr/local/bin/docker-compose
+
+docker-compose version
+Docker Compose version v2.23.3
+```
+
+Vault
+https://developer.hashicorp.com/vault/downloads
+```
+ wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+ echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+ sudo apt update && sudo apt install vault
+```
+
+#### How to run it:
+
+In steps below we will creating Docker containers for Vault database. If you have problem:
+```
+vault-client-1  | /bin/sh: 1: ./run.sh: Permission denied
+vault-client-1 exited with code 126
+```
+try to add credentials on <i>run.sh</i> and rebuild.
+
+```
+docker-compose create
+[+] Running 20/20
+ ✔ db 13 layers [⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                                                                        8.2s 
+   ✔ bb263680fed1 Pull complete                                                                                               0.9s 
+   ✔ 75a54e59e691 Pull complete                                                                                               0.9s
+   ...............................
+ => => writing image sha256:266f3572ab480111a88cddab87971add8373da82eca4c7318aff0f783b163b7b                                  0.0s 
+ => => naming to docker.io/library/lecture7-secrets-vault-client                                                              0.0s 
+[+] Creating 4/1                                                                                                                   
+ ✔ Network lecture7-secrets_vault-network     Created                                                                         0.1s 
+ ✔ Container lecture7-secrets-db-1            Created                                                                         0.0s 
+ ✔ Container lecture7-secrets-vault-client-1  Created                                                                         0.0s 
+ ✔ Container lecture7-secrets-vault-server-1  Created                                                                         0.0s 
+
+sudo docker ps -a
+CONTAINER ID   IMAGE                           COMMAND                  CREATED         STATUS    PORTS     NAMES
+4f1026d75a03   vault:1.13.3                    "docker-entrypoint.s…"   6 seconds ago   Created             lecture7-secrets-vault-server-1
+d4286dd5d51b   lecture7-secrets-vault-client   "/bin/sh -c ./run.sh"    6 seconds ago   Created             lecture7-secrets-vault-client-1
+331d7022a3ec   postgres:14.6                   "docker-entrypoint.s…"   6 seconds ago   Created             lecture7-secrets-db-1
+```
+
+After successfully creation of containers, need to run Vault server. Root token IS NOT FOR USING, but for our demo we will using this token.<br>What we have:<br>1 Vault server and 1 client.<br>1. <i>"vault-server-1  |     $ export VAULT_ADDR='http://0.0.0.0:8200'"</i> tell us that we have Vault server => everything is OK.<br>2. Login to Vault: vault-client-1  | + vault login token=my-very-secure-token<br>3. Enable secrets backend and secret credentials: <i>"vault-client-1  | + vault secrets enable -version=2 -path=secrets kv"</i><br>4. Enable DB engine <i>"vault-client-1  | + echo 'Enable DB engine'"</i>
+
+Now we can access Vault GUI via: http://<our_IP_addr>:8200/ui/vault/secrets
