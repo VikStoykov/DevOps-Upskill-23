@@ -267,4 +267,25 @@ localhost                  : ok=3    changed=2    unreachable=0    failed=0    s
   title="Add new user and password"
   style="display: inline-block; margin: 0 auto; max-width: 300px">
 
+***
+### 7. lecture8-pipelines
+#### Task
+1. _https://docs.github.com/en/actions/quickstart_
+2. _Make your workflow trigger on pull request._
+3. _Make your workflow trigger on pull request and only when specific files are changed_
+4. _Run a simple workflow with: * lint_
 
+More info: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request
+
+Workflow below will run only on pull request in main branch and only for JS files.
+```
+name: Workflow on specific cases for lecture 8
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+        - 'main'
+    paths:
+        - '**.js'
+```
