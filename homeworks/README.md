@@ -180,13 +180,13 @@ After successfully creation of containers, need to run Vault server. Root token 
 Now we can access Vault GUI via: <i>http://<our_IP_addr>:8200/ui/vault/secrets</i>
 
 <img
-  src="images/vault1.jpg"
+  src="images/vault1.JPG"
   alt="Alt text"
   title="Sign to Vault"
   style="display: inline-block; margin: 0 auto; max-width: 300px">
 
 <img
-  src="images/vault2.jpg"
+  src="images/vault2.JPG"
   alt="Alt text"
   title="Manage Vault secrets"
   style="display: inline-block; margin: 0 auto; max-width: 300px">
@@ -238,7 +238,7 @@ _Create an Ansible vault. Store credentials to your Docker hub in that vault. Up
 
  1. Add username and password for Docker acc by Vault GUI
  <img
-  src="images/vault3.jpg"
+  src="images/vault3.JPG"
   alt="Alt text"
   title="Add new user and password"
   style="display: inline-block; margin: 0 auto; max-width: 300px">
@@ -262,7 +262,7 @@ localhost                  : ok=3    changed=2    unreachable=0    failed=0    s
 
 3. Check image on DockerHub
  <img
-  src="images/vault4.jpg"
+  src="images/vault4.JPG"
   alt="DockerHub image"
   title="Add new user and password"
   style="display: inline-block; margin: 0 auto; max-width: 300px">
