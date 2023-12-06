@@ -1,0 +1,36 @@
+name: Workflow on specific cases for lecture 8
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches:
+        - 'lec8-pipelines'
+    paths:
+        - '**.js'
+
+jobs:
+  build-container:
+    name: Build container
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./homeworks/lecture4-containers/Dockerfile
+          platforms: linux/amd64
+          push: false
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/lecture2-homework:latest, ${{ secrets.DOCKERHUB_USERNAME }}/lecture2-homework:${{ github.run_number }}
