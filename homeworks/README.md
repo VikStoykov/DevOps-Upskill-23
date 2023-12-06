@@ -107,7 +107,37 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=10   changed=9    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ```
 ***
-### 6. lecture7-secrets
+### 6. lecture6-devsecops
+#### Resurces
+https://www.redhat.com/en/topics/devops/what-is-devsecops
+https://simple.wikipedia.org/wiki/Defense_in_depth_(computing)
+https://www.softwaresecured.com/what-do-sast-dast-iast-and-rasp-mean-to-developers/
+https://www.ptsecurity.com/ww-en/analytics/knowledge-base/sast-dast-iast-and-rasp-how-to-choose/
+https://owasp.org/
+https://docs.aws.amazon.com/whitepapers/latest/aws-security-incident-response-guide/
+
+Repo is scanned with SonarCloud and Snyk and on every merge is checked by Snyk:
+<br>
+<img
+  src="images/snyk.JPG"
+  alt="Snyk"
+  title="Snyk"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+<br>
+<img
+  src="images/sonar_cloud.JPG"
+  alt="Sonar Cloud"
+  title="Sonar Cloud Dashboard"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+<br>
+<img
+  src="images/snyk_check_merge.JPG"
+  alt="Check on merge with Snyk"
+  title="Check on merge with Snyk"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+***
+### 7. lecture7-secrets
 More info in [README.md](https://github.com/VikStoykov/DevOps-Upskill-23/tree/main/homeworks/lecture7-secrets) in lecture7-secrets folder
 
 #### Requirement
@@ -184,7 +214,7 @@ Now we can access Vault GUI via: <i>http://<our_IP_addr>:8200/ui/vault/secrets</
   alt="Alt text"
   title="Sign to Vault"
   style="display: inline-block; margin: 0 auto; max-width: 300px">
-
+<br>
 <img
   src="images/vault2.JPG"
   alt="Alt text"
@@ -268,7 +298,7 @@ localhost                  : ok=3    changed=2    unreachable=0    failed=0    s
   style="display: inline-block; margin: 0 auto; max-width: 300px">
 
 ***
-### 7. lecture8-pipelines
+### 8. lecture8-pipelines
 #### Task
 1. _https://docs.github.com/en/actions/quickstart_
 2. _Make your workflow trigger on pull request._
