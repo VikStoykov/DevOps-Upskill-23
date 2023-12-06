@@ -1,5 +1,7 @@
 # Homeworks
 [![Build and push image to DockerHub for L4 Homework](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml)
+[![CI Pipeline](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/editorconfig.yaml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/editorconfig.yaml)
+[![Workflow on specific cases for lecture 8](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_push_spec_task_k8.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_push_spec_task_k8.yml)
 
 This is folder with all homeworks. For every homework you can find detailed information how to run it.
 
@@ -299,6 +301,7 @@ localhost                  : ok=3    changed=2    unreachable=0    failed=0    s
 
 ***
 ### 8. lecture8-pipelines
+[![Workflow on specific cases for lecture 8](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_push_spec_task_k8.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_push_spec_task_k8.yml)
 #### Task
 1. _https://docs.github.com/en/actions/quickstart_
 2. _Make your workflow trigger on pull request._
