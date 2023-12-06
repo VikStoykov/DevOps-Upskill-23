@@ -1,0 +1,37 @@
+- hosts: localhost
+  # Collectd facts- no
+  gather_facts: false
+  # Don't assume another user(become creates sudo if yes)
+  become: false
+
+  vars:
+    app_host: "0.0.0.0"
+    listen_port: "5000"
+    image_name: vikstoykov/vault-test
+    image_tag: v0.1
+    code_directory: "/home/victor/Downloads/DevOps-Upskill-23"
+    username: "{{ lookup('hashi_vault', 'secrets/data/docker:docker_username') }}"
+    password: "{{ lookup('hashi_vault', 'secrets/data/docker:docker_password') }}"
+
+
+  tasks:
+  - name: Log into DockerHub
+    docker_login:
+      username: "{{ username }}"
+      password: "{{ password }}"
+
+  - name: Build "{{ image_name }}:{{ image_tag }}" image
+    community.docker.docker_image:
+      name: "{{ image_name }}:{{ image_tag }}"
+      build:
+        path: "{{ code_directory }}/homeworks/lecture4-devops-programme/"
+        args:
+          listen_port: "{{ listen_port }}"
+      source: build
+
+  - name: Push "{{ image_name }}:{{ image_tag }}" to docker hub
+    community.docker.docker_image:
+      name: "{{ image_name }}:{{ image_tag }}"
+      repository: "{{ image_name }}:{{ image_tag }}"
+      push: true
+      source: local
