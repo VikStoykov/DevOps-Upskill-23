@@ -106,7 +106,7 @@ changed: [localhost]
 PLAY RECAP **************************************************************************************************************************************
 localhost                  : ok=10   changed=9    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 ```
-
+***
 ### 6. lecture7-secrets
 More info in [README.md](https://github.com/VikStoykov/DevOps-Upskill-23/tree/main/homeworks/lecture7-secrets) in lecture7-secrets folder
 
@@ -142,6 +142,12 @@ vault-client-1 exited with code 126
 ```
 try to add credentials on <i>run.sh</i> and rebuild.
 
+On this problem
+```
+fatal: [localhost]: FAILED! => {"msg": "An unhandled exception occurred while templating '{{ lookup('hashi_vault', 'secrets/data/dev:password') }}'. Error was a <class 'ansible.errors.AnsibleError'>, original message: An unhandled exception occurred while running the lookup plugin 'hashi_vault'. Error was a <class 'ansible.errors.AnsibleError'>, original message: Please pip install hvac to use the hashi_vault lookup module."}
+```
+try to add install hvac: <i>pip install hvac</i> and rerun playbook.yaml.
+
 ```
 docker-compose create
 [+] Running 20/20
@@ -163,7 +169,102 @@ CONTAINER ID   IMAGE                           COMMAND                  CREATED 
 d4286dd5d51b   lecture7-secrets-vault-client   "/bin/sh -c ./run.sh"    6 seconds ago   Created             lecture7-secrets-vault-client-1
 331d7022a3ec   postgres:14.6                   "docker-entrypoint.s…"   6 seconds ago   Created             lecture7-secrets-db-1
 ```
+<b>docker-compose up</b> to run environment.
 
-After successfully creation of containers, need to run Vault server. Root token IS NOT FOR USING, but for our demo we will using this token.<br>What we have:<br>1 Vault server and 1 client.<br>1. <i>"vault-server-1  |     $ export VAULT_ADDR='http://0.0.0.0:8200'"</i> tell us that we have Vault server => everything is OK.<br>2. Login to Vault: vault-client-1  | + vault login token=my-very-secure-token<br>3. Enable secrets backend and secret credentials: <i>"vault-client-1  | + vault secrets enable -version=2 -path=secrets kv"</i><br>4. Enable DB engine <i>"vault-client-1  | + echo 'Enable DB engine'"</i>
+After successfully creation of containers, need to run Vault server. Root token IS NOT FOR USING, but for our demo we will using this token.<br>What we have:<br>1 Vault server and 1 client.
+1. <i>"vault-server-1  |     $ export VAULT_ADDR='http://0.0.0.0:8200'"</i> tell us that we have Vault server => everything is OK.
+2. Login to Vault: vault-client-1  | + vault login token=my-very-secure-token
+3. Enable secrets backend and secret credentials: <i>"vault-client-1  | + vault secrets enable -version=2 -path=secrets kv"</i>
+4. Enable DB engine <i>"vault-client-1  | + echo 'Enable DB engine'"</i>
 
-Now we can access Vault GUI via: http://<our_IP_addr>:8200/ui/vault/secrets
+Now we can access Vault GUI via: <i>http://<our_IP_addr>:8200/ui/vault/secrets</i>
+
+<img
+  src="images/vault1.jpg"
+  alt="Alt text"
+  title="Sign to Vault"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+<img
+  src="images/vault2.jpg"
+  alt="Alt text"
+  title="Manage Vault secrets"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+#### How it works
+Create a database:
+```yaml
+  db:
+    image: postgres:14.6
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "mypassword"
+```
+Create network:
+```yaml
+    networks:
+      vault-network:
+        ipv4_address: 172.21.0.30
+        aliases:
+          - db
+```
+Create Vault server and set to it `super secure token`
+```yaml
+  vault-server:
+    image: vault:1.13.3
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_ADDR: "http://0.0.0.0:8200"
+      VAULT_DEV_ROOT_TOKEN_ID: "my-very-secure-token"
+    cap_add:
+      - IPC_LOCK
+```
+Set it on already created network and configure to depend it on created DB.
+```yaml
+    networks:
+      vault-network:
+        ipv4_address: 172.21.0.10
+        aliases:
+          - vault-server
+    depends_on:
+      - "db"
+```
+The Vault client makes it works (provision the Vault server: `run.sh` script). In `run.sh` we are waiting to starting of Vault server and then trying to authenticate with our TOKEN. Then initializing backend and sets it to type 2 (in Vault we have 2 types of version: v1 without version control of secrets and v2 for version control). `Enable DB engine` step initialize for us DB backend and it allows to us to get dynamic secrets from Vault.
+
+#### Test on Ansible:
+_Create an Ansible vault. Store credentials to your Docker hub in that vault. Update the playbook you've created last time to use those credentials to login to your DockerHUB account to publish the built image. Open a PR and submit a link to ti. Remember - !!!do not publish your Ansible Vault password.!!!_
+
+ 1. Add username and password for Docker acc by Vault GUI
+ <img
+  src="images/vault3.jpg"
+  alt="Alt text"
+  title="Add new user and password"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+ 2. Start playbook from _ansible_ directory
+  <b>ansible-playbook playbook.yaml</b>
+ ```
+PLAY [localhost] **********************************************************************************************************************************************************************************************
+TASK [Log into DockerHub] *************************************************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [Build "vikstoykov/vault-test:v0.1" image] ***************************************************************************************************************************************************************
+changed: [localhost]
+
+TASK [Push "vikstoykov/vault-test:v0.1" to docker hub] ********************************************************************************************************************************************************
+changed: [localhost]
+
+PLAY RECAP ****************************************************************************************************************************************************************************************************
+localhost                  : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+ ```
+
+3. Check image on DockerHub
+ <img
+  src="images/vault4.jpg"
+  alt="DockerHub image"
+  title="Add new user and password"
+  style="display: inline-block; margin: 0 auto; max-width: 300px">
+
+
