@@ -1,7 +1,8 @@
 <a name="readme-top"></a>
 # DevOps-Upskill-23
-[![Build and push image to DockerHub for L4 Homework](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml) <br/>
+[![Build and push image to DockerHub for L4 Homework](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_l4.yml)
 [![CI Pipeline](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/editorconfig.yaml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/editorconfig.yaml)
+[![Workflow on specific cases for lecture 8](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_push_spec_task_k8.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_push_spec_task_k8.yml)
 
 <!-- PROJECT LOGO -->
 <br />
