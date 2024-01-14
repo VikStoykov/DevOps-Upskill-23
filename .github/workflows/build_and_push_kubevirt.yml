@@ -25,7 +25,7 @@ jobs:
         uses: GuillaumeFalourd/clone-github-repo-action@v2.3
         with:
             depth: 1
-            branch: 'origin/release-0.59'
+            branch: 'release-0.59'
             owner: 'kubevirt'
             repository: 'kubevirt'
 
