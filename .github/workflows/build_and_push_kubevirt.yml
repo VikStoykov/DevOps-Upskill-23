@@ -15,22 +15,23 @@ jobs:
       runs-on: ubuntu-latest
       strategy:
         matrix:
+            images: [ 'virt-api', 'virt-controller', 'virt-handler', 'virt-launcher', 'virt-operator' ]
             go-version: [ '1.21.x' ]
             platforms: [ 'linux/amd64' ]
             include:
               - dockerfile: ./src/dockerfiles/virt-api.Dockerfile
-                image: virt-api
+                images: virt-api
               - dockerfile: ./src/dockerfiles/virt-controller.Dockerfile
-                image: virt-controller
+                images: virt-controller
               - dockerfile: ./src/dockerfiles/virt-handler.Dockerfile
-                image: virt-handler
+                images: virt-handler
               - dockerfile: ./src/dockerfiles/virt-launcher.Dockerfile
-                image: virt-launcher
+                images: virt-launcher
               - dockerfile: ./src/dockerfiles/virt-operator.Dockerfile
-                image: virt-operator
+                images: virt-operator
       steps:
-      - name: Debug ${{ matrix.image }}
-        run: echo "${{ matrix.platforms }} - ${{ matrix.dockerfile }} - ${{ matrix.image }}"
+      - name: Debug ${{ matrix.images }}
+        run: echo "${{ matrix.platforms }} - ${{ matrix.dockerfile }} - ${{ matrix.images }}"
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -84,7 +85,7 @@ jobs:
           file: ${{ matrix.dockerfile }}
           platforms: ${{ matrix.platforms }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.images }}:${{ github.sha }}
 
     #   - run: echo "✔ Build a Docker image. Use Git commit SHA as an Image tag."
     #   - name: Build Docker image
