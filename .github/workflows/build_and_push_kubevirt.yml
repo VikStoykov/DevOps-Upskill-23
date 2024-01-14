@@ -6,6 +6,8 @@ name: Kubevirt build
 #     branches:
 #       - main
 
+##TODO: Cache management
+
 # Test manually
 on: 
     workflow_dispatch:
@@ -15,24 +17,17 @@ jobs:
       runs-on: ubuntu-latest
       strategy:
         matrix:
-            images: [ 'virt-api', 'virt-controller', 'virt-handler', 'virt-launcher', 'virt-operator' ]
             go-version: [ '1.21.x' ]
             platforms: [ 'linux/amd64' ]
-            include:
-              - dockerfile: ./src/dockerfiles/virt-api.Dockerfile
-                images: virt-api
-              - dockerfile: ./src/dockerfiles/virt-controller.Dockerfile
-                images: virt-controller
-              - dockerfile: ./src/dockerfiles/virt-handler.Dockerfile
-                images: virt-handler
-              - dockerfile: ./src/dockerfiles/virt-launcher.Dockerfile
-                images: virt-launcher
-              - dockerfile: ./src/dockerfiles/virt-operator.Dockerfile
-                images: virt-operator
+      env:
+        DOCKERFILE_DIR: "./src/dockerfiles/"
+        SUB_PROJECT: "kubevirt"
+        API_IMG: "virt-api"
+        CONTROLLER_IMG: "controller-api"
+        HANDLER_IMG: "handler-api"
+        LAUNCHER_IMG: "launcher-api"
+        OPERATOR_IMG: "operator-api"
       steps:
-      - name: Debug ${{ matrix.images }}
-        run: echo "${{ matrix.platforms }} - ${{ matrix.dockerfile }} - ${{ matrix.images }}"
-
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -53,13 +48,13 @@ jobs:
       - name: Display Go version
         run: go version
 
-      - name: Debug
-        run: |
-            echo "---= ls =---" && ls
-            echo "---= pwd =---" && pwd
-            echo "---= cd to kubevirt dir =---" && cd kubevirt/
-            echo "---= pwd =---" && pwd
-            echo "---= ls =---" && ls
+      # - name: Debug
+      #   run: |
+      #       echo "---= ls =---" && ls
+      #       echo "---= pwd =---" && pwd
+      #       echo "---= cd to kubevirt dir =---" && cd kubevirt/
+      #       echo "---= pwd =---" && pwd
+      #       echo "---= ls =---" && ls
 
       - name: Apply patches
         run: |
@@ -78,47 +73,47 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker images for ${{ matrix.platforms }} and push them to DockerHub
+      - name: Build Docker images for ${{ env.API_IMG }} and push them to DockerHub
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ${{ matrix.dockerfile }}
+          file: ${{ env.DOCKERFILE_DIR }}${{ env.API_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.images }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SUB_PROJECT }}/${{ env.API_IMG }}:${{ github.sha }}
 
-    #   - run: echo "✔ Build a Docker image. Use Git commit SHA as an Image tag."
-    #   - name: Build Docker image
-    #     # run: |
-    #     # docker build -t docker.io/my-organization/my-app:${{ github.sha }} .
-    #     uses: docker/build-push-action@v5
-    #     with:
-    #       context: ./homeworks/lecture4-devops-programme/
-    #       file: ./homeworks/lecture4-devops-programme/Dockerfile
-    #       platforms: linux/amd64
-    #       push: false
-    #       tags: ${{ secrets.DOCKERHUB_USERNAME }}/lab2:${{ github.sha }}
+      - name: Build Docker images for ${{ env.CONTROLLER_IMG }} and push them to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ env.DOCKERFILE_DIR }}${{ env.CONTROLLER_IMG }}.Dockerfile
+          platforms: ${{ matrix.platforms }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SUB_PROJECT }}/${{ env.CONTROLLER_IMG }}:${{ github.sha }}
 
-    # deploy:
-    #   runs-on: ubuntu-latest
-    #   needs: build
-    #   steps:
-    #   - run: echo "✔ Checkout code"
-    #   - name: Checkout code
-    #     uses: actions/checkout@v3
+      - name: Build Docker images for ${{ env.HANDLER_IMG }} and push them to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ env.DOCKERFILE_DIR }}${{ env.HANDLER_IMG }}.Dockerfile
+          platforms: ${{ matrix.platforms }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SUB_PROJECT }}/${{ env.HANDLER_IMG }}:${{ github.sha }}
 
-    #   - name: Login to Docker Hub
-    #     uses: docker/login-action@v3
-    #     with:
-    #       username: ${{ secrets.DOCKERHUB_USERNAME }}
-    #       password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Docker images for ${{ env.LAUNCHER_IMG }} and push them to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ env.DOCKERFILE_DIR }}${{ env.LAUNCHER_IMG }}.Dockerfile
+          platforms: ${{ matrix.platforms }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SUB_PROJECT }}/${{ env.LAUNCHER_IMG }}:${{ github.sha }}
 
-    #   - run: echo "✔ Push the built image to your Docker HUB account"
-    #   - name: Build Docker image
-    #     uses: docker/build-push-action@v5
-    #     with:
-    #       context: ./homeworks/lecture4-devops-programme/
-    #       file: ./homeworks/lecture4-devops-programme/Dockerfile
-    #       platforms: linux/amd64
-    #       push: true
-    #       tags: ${{ secrets.DOCKERHUB_USERNAME }}/lab2:${{ github.sha }}
+      - name: Build Docker images for ${{ env.OPERATOR_IMG }} and push them to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ env.DOCKERFILE_DIR }}${{ env.OPERATOR_IMG }}.Dockerfile
+          platforms: ${{ matrix.platforms }}
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SUB_PROJECT }}/${{ env.OPERATOR_IMG }}:${{ github.sha }}
