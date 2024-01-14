@@ -44,10 +44,13 @@ jobs:
             echo "---= cd to kubevirt dir =---" && cd kubevirt/
             echo "---= pwd =---" && pwd
             echo "---= ls =---" && ls
+            echo "---= ls /root/go/src/kubevirt.io/kubevirt =---" && ls /root/go/src/kubevirt.io/kubevirt
 
       - name: Build binaries
         run: |
-          git config --global --add safe.directory /root/go/src/kubevirt.io/kubevirt
+          ls -la /root/go/src/kubevirt.io/kubevirt
+          chown -R $USER /root/go/src/kubevirt.io/kubevirt
+          ls -la /root/go/src/kubevirt.io/kubevirt
           cd kubevirt/
           make go-build
 
