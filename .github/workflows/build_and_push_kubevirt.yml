@@ -22,10 +22,11 @@ jobs:
       env:
         DOCKERFILE_DIR: "./src/dockerfiles/"
         API_IMG: "virt-api"
-        CONTROLLER_IMG: "controller-api"
-        HANDLER_IMG: "handler-api"
-        LAUNCHER_IMG: "launcher-api"
-        OPERATOR_IMG: "operator-api"
+        CONTROLLER_IMG: "virt-controller"
+        HANDLER_IMG: "virt-handler"
+        LAUNCHER_IMG: "virt-launcher"
+        OPERATOR_IMG: "virt-operator"
+        PUSH: true
       steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -73,6 +74,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - run: echo "Build docker images and push them to Dockerhub"
+        if: env.PUSH
 
       - name: Build api
         uses: docker/build-push-action@v5
@@ -80,7 +82,7 @@ jobs:
           context: .
           file: ${{ env.DOCKERFILE_DIR }}${{ env.API_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
-          push: true
+          push: ${{ env.PUSH }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.API_IMG }}:${{ github.sha }}
 
       - name: Build controller
@@ -89,7 +91,7 @@ jobs:
           context: .
           file: ${{ env.DOCKERFILE_DIR }}${{ env.CONTROLLER_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
-          push: true
+          push: ${{ env.PUSH }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CONTROLLER_IMG }}:${{ github.sha }}
 
       - name: Build handler
@@ -98,7 +100,7 @@ jobs:
           context: .
           file: ${{ env.DOCKERFILE_DIR }}${{ env.HANDLER_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
-          push: true
+          push: ${{ env.PUSH }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.HANDLER_IMG }}:${{ github.sha }}
 
       - name: Build launcher
@@ -107,7 +109,7 @@ jobs:
           context: .
           file: ${{ env.DOCKERFILE_DIR }}${{ env.LAUNCHER_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
-          push: true
+          push: ${{ env.PUSH }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.LAUNCHER_IMG }}:${{ github.sha }}
 
       - name: Build operator
@@ -116,5 +118,5 @@ jobs:
           context: .
           file: ${{ env.DOCKERFILE_DIR }}${{ env.OPERATOR_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
-          push: true
+          push: ${{ env.PUSH }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.OPERATOR_IMG }}:${{ github.sha }}
