@@ -21,12 +21,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Checkout tools repo
-        uses: actions/checkout@v4
+      - name: Clone Kubevirt PUBLIC repository
+        uses: GuillaumeFalourd/clone-github-repo-action@v2.3
         with:
-          ref: origin/release-0.59
-          repository: kubevirt/kubevirt
-          path: kubevirt
+            depth: 1
+            branch: 'origin/release-0.59'
+            owner: 'kubevirt'
+            repository: 'kubevirt'
 
       - name: Setup Go ${{ matrix.go-version }}
         uses: actions/setup-go@v4
