@@ -47,6 +47,7 @@ jobs:
 
       - name: Build binaries
         run: |
+          git config --global --add safe.directory /root/go/src/kubevirt.io/kubevirt
           cd kubevirt/
           make go-build
 
