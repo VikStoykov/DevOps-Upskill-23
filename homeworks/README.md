@@ -303,7 +303,7 @@ localhost                  : ok=3    changed=2    unreachable=0    failed=0    s
 ### 8. lecture8-pipelines
 [![Workflow on specific cases for lecture 8](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_push_spec_task_k8.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_push_spec_task_k8.yml)
 #### Task
-1. _https://docs.github.com/en/actions/quickstart_
+1. https://docs.github.com/en/actions/quickstart
 2. _Make your workflow trigger on pull request._
 3. _Make your workflow trigger on pull request and only when specific files are changed_
 4. _Run a simple workflow with: * lint_
@@ -322,3 +322,8 @@ on:
     paths:
         - '**.js'
 ```
+***
+### 9. Cloud - services, IaaS, PaaS, SaaS
+Take Cloud Practitioner on skillbuilder.aws
+***
+### 10. Cloud - services, IaaS, PaaS, SaaS

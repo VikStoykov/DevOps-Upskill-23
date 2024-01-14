@@ -97,6 +97,13 @@ See the [open issues](https://github.com/VikStoykov/DevOps-Upskill-23/issues?q=i
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
+<!-- ROADMAP -->
+## High-level design
+
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 
 <!-- CONTRIBUTING -->
 ## Contributing
