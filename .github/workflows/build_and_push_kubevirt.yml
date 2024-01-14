@@ -44,16 +44,11 @@ jobs:
             echo "---= cd to kubevirt dir =---" && cd kubevirt/
             echo "---= pwd =---" && pwd
             echo "---= ls =---" && ls
-            chown -R $USER /root/go/src/kubevirt.io/kubevirt
-            echo "---= ls /root/go/src/kubevirt.io/kubevirt =---" && ls /root/go/src/kubevirt.io/kubevirt
 
       - name: Build binaries
         run: |
-          ls -la /root/go/src/kubevirt.io/kubevirt
-          chown -R $USER /root/go/src/kubevirt.io/kubevirt
-          ls -la /root/go/src/kubevirt.io/kubevirt
           cd kubevirt/
-          make go-build
+          export GOFLAGS=-buildvcs=false && make go-build
 
     #   - run: echo "✔ Build a Docker image. Use Git commit SHA as an Image tag."
     #   - name: Build Docker image
