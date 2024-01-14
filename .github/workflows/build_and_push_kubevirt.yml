@@ -48,7 +48,7 @@ jobs:
       - name: Build binaries
         run: |
           cd kubevirt/
-          make go-all
+          make go-build
 
     #   - run: echo "✔ Build a Docker image. Use Git commit SHA as an Image tag."
     #   - name: Build Docker image
