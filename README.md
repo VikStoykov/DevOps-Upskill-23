@@ -81,10 +81,19 @@ _For more examples, please refer to the [Documentation](./docs)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Idea for the project
-- [ ] Choosing building tools
-- [ ] Choosing language and tools
-- [ ] Create, build and test localy
+- [x] Idea for the project
+  <i>CI/CD pipeline for own Kubevirt features</i> 
+- [x] Choosed building tools
+  - <i>GoLang;
+  - GitHub Actions;
+  - DockerHub for sharing container images;
+  - Snyk and Sonar for source code security source code testing.</i> 
+- [x] Choosed languages and tools
+  - <i>GoLang</i> 
+- [ ] Create, build and test
+  - [ ] Create <i>patches for Kubevirt</i>
+  - [ ] Build <i>with GitHub and publish to DockerHub</i>
+  - [ ] Test <i>on AWS with Terraform</i>
 - [ ] Run on Kubernetes cluster
     - [ ] Prometheus statistics
     - [ ] Cluster with 2 or more workers
@@ -100,7 +109,9 @@ See the [open issues](https://github.com/VikStoykov/DevOps-Upskill-23/issues?q=i
 <!-- ROADMAP -->
 ## High-level design
 
-
+Modified Kubevirt with cpu pinning
+Create patch file and build Kubevirt
+Deploy K8S cluster in AWS with terraform 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

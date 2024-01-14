@@ -1,0 +1,13 @@
+diff --git a/hack/common.sh b/hack/common.sh
+index 01c81f607..3ab6ed4f5 100644
+--- a/hack/common.sh
++++ b/hack/common.sh
+@@ -27,7 +27,7 @@ if [ -f cluster-up/hack/common.sh ]; then
+     source cluster-up/hack/common.sh
+ fi
+ 
+-export GOFLAGS="$GOFLAGS -mod=vendor"
++export GOFLAGS="$GOFLAGS -mod=vendor -buildvcs=false"
+ 
+ KUBEVIRT_DIR="$(
+     cd "$(dirname "$BASH_SOURCE[0]")/../"
