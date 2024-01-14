@@ -21,7 +21,6 @@ jobs:
             platforms: [ 'linux/amd64' ]
       env:
         DOCKERFILE_DIR: "./src/dockerfiles/"
-        SUB_PROJECT: "kubevirt"
         API_IMG: "virt-api"
         CONTROLLER_IMG: "controller-api"
         HANDLER_IMG: "handler-api"
@@ -73,47 +72,49 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker images for ${{ env.API_IMG }} and push them to DockerHub
+      - run: echo "Build docker images and push them to Dockerhub"
+
+      - name: Build api
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{ env.DOCKERFILE_DIR }}${{ env.API_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SUB_PROJECT }}/${{ env.API_IMG }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.API_IMG }}:${{ github.sha }}
 
-      - name: Build Docker images for ${{ env.CONTROLLER_IMG }} and push them to DockerHub
+      - name: Build controller
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{ env.DOCKERFILE_DIR }}${{ env.CONTROLLER_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SUB_PROJECT }}/${{ env.CONTROLLER_IMG }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CONTROLLER_IMG }}:${{ github.sha }}
 
-      - name: Build Docker images for ${{ env.HANDLER_IMG }} and push them to DockerHub
+      - name: Build handler
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{ env.DOCKERFILE_DIR }}${{ env.HANDLER_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SUB_PROJECT }}/${{ env.HANDLER_IMG }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.HANDLER_IMG }}:${{ github.sha }}
 
-      - name: Build Docker images for ${{ env.LAUNCHER_IMG }} and push them to DockerHub
+      - name: Build launcher
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{ env.DOCKERFILE_DIR }}${{ env.LAUNCHER_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SUB_PROJECT }}/${{ env.LAUNCHER_IMG }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.LAUNCHER_IMG }}:${{ github.sha }}
 
-      - name: Build Docker images for ${{ env.OPERATOR_IMG }} and push them to DockerHub
+      - name: Build operator
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{ env.DOCKERFILE_DIR }}${{ env.OPERATOR_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.SUB_PROJECT }}/${{ env.OPERATOR_IMG }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.OPERATOR_IMG }}:${{ github.sha }}
