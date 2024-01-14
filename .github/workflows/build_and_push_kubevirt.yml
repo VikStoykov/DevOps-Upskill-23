@@ -39,14 +39,15 @@ jobs:
 
       - name: Debug
         run: |
-            ls
-            pwd
-            cd kubevirt/
-            pwd
-            ls
+            echo "---= ls =---" && ls
+            echo "---= pwd =---" && pwd
+            echo "---= cd to kubevirt dir =---" && cd kubevirt/
+            echo "---= pwd =---" && pwd
+            echo "---= ls =---" && ls
 
-    #   - name: Build binaries
-    #     run: make go-all
+      - name: Build binaries
+        run: |
+          make go-all
 
     #   - run: echo "✔ Build a Docker image. Use Git commit SHA as an Image tag."
     #   - name: Build Docker image
