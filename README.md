@@ -82,18 +82,24 @@ _For more examples, please refer to the [Documentation](./docs)_
 ## Roadmap
 
 - [x] Idea for the project
-  <i>CI/CD pipeline for own Kubevirt features</i> 
+  _CI/CD pipeline for own Kubevirt features_
+  - [ ] _Phases of SDLC_
+  - [ ] _Value stream mapping_
+  - [ ] _Documentation_
+  - [X] _Choose source control- GitHub_
 - [x] Choosed building tools
-  - <i>GoLang;
-  - GitHub Actions;
-  - DockerHub for sharing container images;
-  - Snyk and Sonar for source code security source code testing.</i> 
+  - _GoLang;_
+  - _GitHub Actions;_
+  - _Ansible;_
+  - _DockerHub for sharing container images;_
+  - _Snyk and Sonar for source code security source code testing._
 - [x] Choosed languages and tools
-  - <i>GoLang</i> 
+  - _GoLang_ 
 - [ ] Create, build and test
-  - [ ] Create <i>patches for Kubevirt</i>
-  - [ ] Build <i>with GitHub and publish to DockerHub</i>
-  - [ ] Test <i>on AWS with Terraform</i>
+  - [ ] Build AWS custom AMI (_part of 'Configuration management'_)
+  - [ ] Create _patches for Kubevirt_
+  - [ ] Build _with GitHub and publish to DockerHub_
+  - [ ] Test _on AWS with Terraform_
 - [ ] Run on Kubernetes cluster
     - [ ] Prometheus statistics
     - [ ] Cluster with 2 or more workers
