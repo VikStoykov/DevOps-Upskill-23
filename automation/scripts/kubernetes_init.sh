@@ -19,13 +19,23 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.ipv4.ip_forward                 = 1 
 EOF
 
-    sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+    # Reload modules
+    sudo sysctl --system
+
     sudo swapoff -a
+    sudo sed -i '/swap/d' /etc/fstab
+
+    # Disable Firewall
+    # sudo ufw disable
 
     # Download and install containerd
     wget https://github.com/containerd/containerd/releases/download/v1.6.2/containerd-1.6.2-linux-amd64.tar.gz
     sudo tar Cxzvf /usr/local containerd-1.6.2-linux-amd64.tar.gz
     wget https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
+
+    sudo mkdir /etc/containerd
+    sudo sh -c "containerd config default > /etc/containerd/config.toml"
+    sudo sed -i 's/ SystemdCgroup = false/ SystemdCgroup = true/' /etc/containerd/config.toml
 
     sudo cp containerd.service /lib/systemd/system/containerd.service
     sudo systemctl daemon-reload
@@ -51,10 +61,13 @@ timeout: 5
 EOF
 }
 
+function preprare_kubernetes () {
+    sudo kubeadm config images pull --cri-socket unix:///run/containerd/containerd.sock --kubernetes-version v1.26.3
+}
+
 function start_cluster () {
     # Init cluster
-    sudo kubeadm config images pull --cri-socket unix:///run/containerd/containerd.sock --kubernetes-version v1.26.3
-    sudo kubeadm init   --pod-network-cidr=10.244.0.0/16   --upload-certs --kubernetes-version=v1.26.1  --control-plane-endpoint=$(hostname) --ignore-preflight-errors=all  --cri-socket unix:///run/containerd/containerd.sock
+    sudo kubeadm init --upload-certs --kubernetes-version=v1.26.1  --ignore-preflight-errors=all  --cri-socket unix:///run/containerd/containerd.sock
 
     sudo mkdir -p $HOME/.kube
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -70,7 +83,8 @@ function start_cluster () {
 }
 
 install_necessery_components
-start_cluster
+preprare_kubernetes
+#start_cluster
 
 sudo mkdir /home/ubuntu/config
 sudo touch /home/ubuntu/config/ready
