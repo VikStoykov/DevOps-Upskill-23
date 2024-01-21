@@ -14,9 +14,8 @@ _This is part of 'Configuration management'_
 3. Setup Non Ansible Local Files — Project Directory, SSH Keys
 4. Setup Ansible vault or Hashicorp vault
 5. Setup Ansible playbooks
-6. Run Ansible to generate EC2 instance
-7. Install K8S in instance
-8. Create custom AMI from instance
+6. Setup init script
+7. Run Ansible playbook
 
 ### 1. Prepare AWS Account
 If you already have an IAM user with an Access/Secret Access key and EC2 permissions, you can skip this step and proceed to installing the required software on your local computer.
@@ -32,7 +31,9 @@ and roles to it:
 ![Alt text](/images/ami_user_group_roles.png)
 
 ### 2. Install required software on local computer
-Required by AWS Ansible module:
+Install Ansible: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+
+Required by AWS Ansible module for Ansible:
 ```
 # pip3 install boto3
 # pip3 install botocore
@@ -47,7 +48,7 @@ amazon.aws (7.2.0) was installed successfully
 
 ### 4. Setup Non Ansible Local Files — Project Directory, SSH Keys
 #### Generate SSH keys
-Generate SSH keys (to SSH into provisioned EC2 instances) with this command,
+Generate SSH keys (to SSH into provisioned EC2 instances) with this command:
 
 1. This creates a public (.pub) and private key in the ~/.ssh/ directory
 ```# ssh-keygen -t rsa -b 4096 -f ~/.ssh/my_aws```
@@ -79,10 +80,144 @@ With this method, you will be prompted for a password every time playbooks are e
 ...
 
 ### 5. Setup Ansible playbooks
-Change configuration to your fits.
+Change configuration to your fits in _/automation/ansible/playbook.yml_ :
+```
+  vars:
+    key_name: my_aws             # Key used for SSH
+    region: eu-west-1            # Region may affect response and pricing
+    image: ami-0905a3c97561e0b69 # ec2 ubuntu ami (HVM)
+    id: "kubernetes single node" # name/id of EC2
+    instance_type: t3.xlarge     # Choose instance type, check AWS for pricing
+    volume_size: 60              # Volume size in GB
+    instance_name: Kubernetes cluster- AMI # Name of instance
+    ami_name: k8s_sigle_node_ami # AMI name
+    sec_group: "admin"           # Create Security Group in AWS
+    ssh_user: ubuntu             # User
+    ssh_key: /home/victor/.ssh/my_aws # Local SSH Key
+```
 
-### 6. Run Ansible to generate EC2 instance
+### 6. Setup init script
+We have a script named _kubernetes_init.sh_ located in the _/automation/scripts/_ directory. This script is designed to install various packages related to Kubernetes. At the beginning of the script, you have the option to modify the versions of different packages. The relevant section looks like this:
+```
+RUNC_VERSION="1.1.5"
+CONTAINERD_VERSION="1.6.2"
+KUBERNETES_VERSION="1.26.3"
+VIRTCTL_VERSION="v0.41.0"
+CALICO_VERSION="3.25.0"
+```
+In this section, you can update the versions of the following packages:
+- `RUNC` (version 1.1.5)
+- `CONTAINERD` (version 1.6.2)
+- `KUBERNETES` (version 1.26.3)
+- `VIRTCTL` (version v0.41.0)
+- `CALICO` (version 3.25.0)
+Feel free to change these version numbers based on your requirements or the compatibility of the packages.
 
-### 7. Install K8S in instance
+### 7. Run Ansible playbook
+This process involves initiating an EC2 instance, installing Kubernetes (K8S) packages and modules, and generating an AWS Amazon Machine Image (AMI) from it.
 
-### 8. Create custom AMI from instance
+To execute the playbook, use the following command:
+```ansible-playbook playbook.yml --vault-password-file group_vars/all/pass.yml```
+
+The resulting output will resemble:
+```
+PLAY [localhost] *********************************************************************************************************************************************************************************************
+TASK [roles/instance_init : Create security group] ***********************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [roles/instance_init : Amazon EC2 | Create Key Pair] ****************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [roles/instance_init : Start an instance with a public IP address] **************************************************************************************************************************************
+changed: [localhost]
+
+TASK [roles/connect : Get instances facts] *******************************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [roles/connect : Instance Info] *************************************************************************************************************************************************************************
+ok: [localhost] => {
+    "msg": "Tags: {'Environment': 'Kubernetes', 'Name': 'Kubernetes cluster- AMI'}ID: i-05480df7af53f2922 - State: pending - Public DNS: ec2-54-77-129-97.eu-west-1.compute.amazonaws.com"
+}
+
+TASK [roles/connect : Add new instance to host group] ********************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [roles/connect : Wait for SSH to come up] ***************************************************************************************************************************************************************
+ok: [localhost]
+
+PLAY [Install K8S Cluster] ***********************************************************************************************************************************************************************************
+TASK [Gathering Facts] ***************************************************************************************************************************************************************************************
+ok: [54.77.129.97]
+
+TASK [roles/k8s_installation : Copy init script for Kubernetes] **********************************************************************************************************************************************
+changed: [54.77.129.97]
+
+TASK [roles/k8s_installation : Execute script] ***************************************************************************************************************************************************************
+changed: [54.77.129.97]
+
+TASK [roles/k8s_installation : debug] ************************************************************************************************************************************************************************
+ok: [54.77.129.97] => {
+    "script.stdout_lines": [
+        "overlay ",
+        "br_netfilter ",
+        "net.bridge.bridge-nf-call-iptables  = 1 ",
+        "net.bridge.bridge-nf-call-ip6tables = 1 ",
+        "net.ipv4.ip_forward                 = 1 ",
+        "* Applying /etc/sysctl.d/10-console-messages.conf ...",
+        ...
+        ...
+        ...
+        "[config/images] Pulled registry.k8s.io/kube-apiserver:v1.26.3",
+        "[config/images] Pulled registry.k8s.io/kube-controller-manager:v1.26.3",
+        "[config/images] Pulled registry.k8s.io/kube-scheduler:v1.26.3",
+        "[config/images] Pulled registry.k8s.io/kube-proxy:v1.26.3",
+        "[config/images] Pulled registry.k8s.io/pause:3.9",
+        "[config/images] Pulled registry.k8s.io/etcd:3.5.6-0",
+        "[config/images] Pulled registry.k8s.io/coredns/coredns:v1.9.3"
+    ]
+}
+
+TASK [roles/k8s_installation : Check if init script successfully deployed] ***********************************************************************************************************************************
+ok: [54.77.129.97]
+
+TASK [roles/k8s_installation : Report if a 'ready' file exists] **********************************************************************************************************************************************
+ok: [54.77.129.97] => {
+    "msg": "The init script successfully deployed."
+}
+
+TASK [roles/k8s_installation : Report if a file exists] ******************************************************************************************************************************************************
+skipping: [54.77.129.97]
+
+PLAY [localhost] *********************************************************************************************************************************************************************************************
+TASK [roles/ami_creation : Get instances facts] **************************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [roles/ami_creation : Instance Info] ********************************************************************************************************************************************************************
+ok: [localhost] => {
+    "msg": "Tags: {'Environment': 'Kubernetes', 'Name': 'Kubernetes cluster- AMI'}ID: i-05480df7af53f2922 - State: running - Public DNS: ec2-54-77-129-97.eu-west-1.compute.amazonaws.com"
+}
+
+TASK [roles/ami_creation : AMI Creation] *********************************************************************************************************************************************************************
+changed: [localhost]
+
+TASK [roles/cleanup : Get instances facts] *******************************************************************************************************************************************************************
+ok: [localhost]
+
+TASK [roles/cleanup : Instance Info] *************************************************************************************************************************************************************************
+ok: [localhost]  => {
+    "msg": "Tags: {'Environment': 'Kubernetes', 'Name': 'Kubernetes cluster- AMI'}ID: i-03e826d7ae85785a0 - State: running - Public DNS: ec2-54-228-168-158.eu-west-1.compute.amazonaws.com"
+}
+
+TASK [roles/cleanup : Terminate EC2 instance] ****************************************************************************************************************************************************************
+changed: [localhost] 
+
+PLAY RECAP ***************************************************************************************************************************************************************************************************
+54.228.168.158             : ok=6    changed=2    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+localhost                  : ok=13   changed=3    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+
+EC2 instance:
+![Alt text](/images/ec2_instance_ami.png)
+
+AMI:
+![Alt text](/images/ami.png)
