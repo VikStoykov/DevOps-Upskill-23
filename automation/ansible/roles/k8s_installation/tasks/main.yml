@@ -1,0 +1,26 @@
+---
+- name: Copy init script for Kubernetes
+  get_url:
+    url: https://raw.githubusercontent.com/VikStoykov/DevOps-Upskill-23/config-management/automation/scripts/kubernetes_init.sh
+    dest: "/home/ubuntu/"
+
+- name: Execute script
+  ansible.builtin.shell: sudo /bin/bash kubernetes_init.sh
+  register: script
+
+- debug: var=script.stdout_lines
+
+- name: Check if init script successfully deployed
+  stat:
+    path: /home/ubuntu/config/ready
+  register: file_data
+
+- name: Report if a 'ready' file exists
+  debug:
+    msg: "The init script successfully deployed."
+  when: file_data.stat.exists
+
+- name: Report if a file exists
+  fail:
+    msg: "The init script failed."
+  when: not file_data.stat.exists
