@@ -83,7 +83,7 @@ jobs:
           file: ${{ env.DOCKERFILE_DIR }}${{ env.API_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: ${{ env.PUSH }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.API_IMG }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.API_IMG }}:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.API_IMG }}:latest
 
       - name: Build controller
         uses: docker/build-push-action@v5
@@ -92,7 +92,7 @@ jobs:
           file: ${{ env.DOCKERFILE_DIR }}${{ env.CONTROLLER_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: ${{ env.PUSH }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CONTROLLER_IMG }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CONTROLLER_IMG }}:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CONTROLLER_IMG }}:latest
 
       - name: Build handler
         uses: docker/build-push-action@v5
@@ -101,7 +101,7 @@ jobs:
           file: ${{ env.DOCKERFILE_DIR }}${{ env.HANDLER_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: ${{ env.PUSH }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.HANDLER_IMG }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.HANDLER_IMG }}:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.HANDLER_IMG }}:latest
 
       - name: Build launcher
         uses: docker/build-push-action@v5
@@ -110,7 +110,7 @@ jobs:
           file: ${{ env.DOCKERFILE_DIR }}${{ env.LAUNCHER_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: ${{ env.PUSH }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.LAUNCHER_IMG }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.LAUNCHER_IMG }}:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.LAUNCHER_IMG }}:latest
 
       - name: Build operator
         uses: docker/build-push-action@v5
@@ -119,4 +119,4 @@ jobs:
           file: ${{ env.DOCKERFILE_DIR }}${{ env.OPERATOR_IMG }}.Dockerfile
           platforms: ${{ matrix.platforms }}
           push: ${{ env.PUSH }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.OPERATOR_IMG }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.OPERATOR_IMG }}:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.OPERATOR_IMG }}:latest
