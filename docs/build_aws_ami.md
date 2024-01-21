@@ -31,12 +31,16 @@ and roles to it:
 ![Alt text](/images/ami_user_group_roles.png)
 
 ### 2. Install required software on local computer
-Install Ansible: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+Software is needed on your local computer, if they are already installed, skip this step and start preparing your project directory. The software required includes:
+
+- Python 3.10.12
+- pip3
+- boto (via pip)
+- boto3 (via pip)
+- [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 
 Required by AWS Ansible module for Ansible:
 ```
-# pip3 install boto3
-# pip3 install botocore
 # ansible-galaxy collection install amazon.aws
 Starting galaxy collection install process
 Process install dependency map
