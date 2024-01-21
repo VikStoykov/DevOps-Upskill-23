@@ -1,0 +1,297 @@
+diff --git a/api/openapi-spec/swagger.json b/api/openapi-spec/swagger.json
+index c400279484..9db9df359c 100644
+--- a/api/openapi-spec/swagger.json
++++ b/api/openapi-spec/swagger.json
+@@ -15370,6 +15370,13 @@
+       "description": "NUMA allows specifying settings for the guest NUMA topology",
+       "$ref": "#/definitions/v1.NUMA"
+      },
++     "pinning": {
++      "description": "Pinning specifies the CPU Pinning. User can pin vCPU to specific pCPU via this model: [\"1-2\"]. Example: [\"1-2\",\"2-3\"] means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.",
++      "type": "array",
++      "items": {
++       "type": "string"
++      }
++     },
+      "realtime": {
+       "description": "Realtime instructs the virt-launcher to tune the VMI for lower latency, optional for real time workloads",
+       "$ref": "#/definitions/v1.Realtime"
+@@ -21574,4 +21581,4 @@
+     "in": "header"
+    }
+   }
+- }
+\ No newline at end of file
++ }
+
+diff --git a/pkg/virt-launcher/virtwrap/converter/converter.go b/pkg/virt-launcher/virtwrap/converter/converter.go
+index 0916d26ea0..6224f44210 100644
+--- a/pkg/virt-launcher/virtwrap/converter/converter.go
++++ b/pkg/virt-launcher/virtwrap/converter/converter.go
+@@ -1666,6 +1666,11 @@ func Convert_v1_VirtualMachineInstance_To_api_Domain(vmi *v1.VirtualMachineInsta
+ 			if err != nil {
+ 				return err
+ 			}
++		} else if len(vmi.Spec.Domain.CPU.Pinning) > 0 {
++			if err := vcpu.FormatDomainCPUTune(domain, vmi, c.Topology, c.CPUSet); err != nil {
++				log.Log.Reason(err).Error("TELCO: failed to pin vCPUs to pCPUs.")
++				return err
++			}
+ 		}
+ 	}
+
+diff --git a/pkg/virt-launcher/virtwrap/converter/vcpu/vcpu.go b/pkg/virt-launcher/virtwrap/converter/vcpu/vcpu.go
+index 43ab4e76df..9101b28d5a 100644
+--- a/pkg/virt-launcher/virtwrap/converter/vcpu/vcpu.go
++++ b/pkg/virt-launcher/virtwrap/converter/vcpu/vcpu.go
+@@ -2,6 +2,7 @@ package vcpu
+ 
+ import (
+ 	"fmt"
++	"runtime"
+ 	"strconv"
+ 	"strings"
+ 
+@@ -409,6 +410,48 @@ func FormatDomainIOThreadPin(vmi *v12.VirtualMachineInstance, domain *api.Domain
+ 	return nil
+ }
+ 
++func FormatDomainCPUTune(domain *api.Domain, vmi *v12.VirtualMachineInstance, topology *v1.Topology, cpuset []int) error {
++	logger := log.DefaultLogger()
++	if len(cpuset) == 0 {
++		return fmt.Errorf("failed for get pods pinned cpus")
++	}
++	vcpus := CalculateRequestedVCPUs(domain.Spec.CPU.Topology)
++	cpuTune := api.CPUTune{}
++	cpuPinning := vmi.Spec.Domain.CPU.Pinning
++	cpuSet := make(map[int]int)
++	for idx := 0; idx < len(cpuPinning); idx++ {
++		vCpu, _ := strconv.Atoi(strings.Split(cpuPinning[idx], "-")[0])
++		pCpu, _ := strconv.Atoi(strings.Split(cpuPinning[idx], "-")[1])
++		if pCpu > runtime.NumCPU()-1 {
++			logger.Infof("TELCO: impossible to pin %v on host where we have only %v", pCpu, runtime.NumCPU())
++			continue
++		} else if vCpu > int(vcpus) {
++			logger.Infof("TELCO: impossible to pin %v on VM where we have only %v", vCpu, vcpus)
++			continue
++		} else if vCpu < 0 || pCpu < 0 {
++			logger.Infof("TELCO: impossible to pin negative number")
++			continue
++		}
++
++		cpuSet[vCpu] = pCpu
++	}
++
++	for idx := 0; idx < int(vcpus); idx++ {
++		vcpupin := api.CPUTuneVCPUPin{}
++		vcpupin.VCPU = uint32(idx)
++		if _, ok := cpuSet[idx]; ok {
++			vcpupin.CPUSet = strconv.Itoa(cpuSet[idx])
++		} else {
++			//vcpupin.CPUSet = strconv.Itoa(c.CPUSet[idx])
++			vcpupin.CPUSet = "0-" + strconv.Itoa(runtime.NumCPU()-1)
++		}
++		cpuTune.VCPUPin = append(cpuTune.VCPUPin, vcpupin)
++	}
++
++	domain.Spec.CPUTune = &cpuTune
++	return nil
++}
++
+ func AdjustDomainForTopologyAndCPUSet(domain *api.Domain, vmi *v12.VirtualMachineInstance, topology *v1.Topology, cpuset []int, useIOThreads bool) error {
+ 	var cpuPool VCPUPool
+ 	if isNumaPassthrough(vmi) {
+diff --git a/pkg/virt-operator/resource/generate/components/validations_generated.go b/pkg/virt-operator/resource/generate/components/validations_generated.go
+index b475a0b618..20b4bac39a 100644
+--- a/pkg/virt-operator/resource/generate/components/validations_generated.go
++++ b/pkg/virt-operator/resource/generate/components/validations_generated.go
+@@ -4951,6 +4951,13 @@ var CRDsValidation map[string]string = map[string]string{
+                                 boundaries of host numa nodes.
+                               type: object
+                           type: object
++                        pinning:
++                          description: 'Pinning specifies the CPU Pinning. User can pin vCPU
++                            to specific pCPU via this model: ["1-2"]. Example: ["1-2","2-3"]
++                            means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.'
++                          items:
++                            type: string
++                          type: array
+                         realtime:
+                           description: Realtime instructs the virt-launcher to tune
+                             the VMI for lower latency, optional for real time workloads
+@@ -7240,6 +7247,13 @@ var CRDsValidation map[string]string = map[string]string{
+                     nodes never cross boundaries of host numa nodes.
+                   type: object
+               type: object
++            pinning:
++              description: 'Pinning specifies the CPU Pinning. User can pin vCPU
++                to specific pCPU via this model: ["1-2"]. Example: ["1-2","2-3"]
++                means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.'
++              items:
++                type: string
++              type: array
+             realtime:
+               description: Realtime instructs the virt-launcher to tune the VMI for
+                 lower latency, optional for real time workloads
+@@ -9201,6 +9215,13 @@ var CRDsValidation map[string]string = map[string]string{
+                         nodes.
+                       type: object
+                   type: object
++                pinning:
++                  description: 'Pinning specifies the CPU Pinning. User can pin vCPU
++                    to specific pCPU via this model: ["1-2"]. Example: ["1-2","2-3"]
++                    means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.'
++                  items:
++                    type: string
++                  type: array
+                 realtime:
+                   description: Realtime instructs the virt-launcher to tune the VMI
+                     for lower latency, optional for real time workloads
+@@ -11702,6 +11723,13 @@ var CRDsValidation map[string]string = map[string]string{
+                         nodes.
+                       type: object
+                   type: object
++                pinning:
++                  description: 'Pinning specifies the CPU Pinning. User can pin vCPU
++                    to specific pCPU via this model: ["1-2"]. Example: ["1-2","2-3"]
++                    means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.'
++                  items:
++                    type: string
++                  type: array
+                 realtime:
+                   description: Realtime instructs the virt-launcher to tune the VMI
+                     for lower latency, optional for real time workloads
+@@ -13784,6 +13812,13 @@ var CRDsValidation map[string]string = map[string]string{
+                                 boundaries of host numa nodes.
+                               type: object
+                           type: object
++                        pinning:
++                          description: 'Pinning specifies the CPU Pinning. User can pin vCPU
++                            to specific pCPU via this model: ["1-2"]. Example: ["1-2","2-3"]
++                            means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.'
++                          items:
++                            type: string
++                          type: array
+                         realtime:
+                           description: Realtime instructs the virt-launcher to tune
+                             the VMI for lower latency, optional for real time workloads
+@@ -15637,6 +15672,13 @@ var CRDsValidation map[string]string = map[string]string{
+                     nodes never cross boundaries of host numa nodes.
+                   type: object
+               type: object
++            pinning:
++              description: 'Pinning specifies the CPU Pinning. User can pin vCPU
++                to specific pCPU via this model: ["1-2"]. Example: ["1-2","2-3"]
++                means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.'
++              items:
++                type: string
++              type: array
+             realtime:
+               description: Realtime instructs the virt-launcher to tune the VMI for
+                 lower latency, optional for real time workloads
+@@ -17735,6 +17777,13 @@ var CRDsValidation map[string]string = map[string]string{
+                                         of host numa nodes.
+                                       type: object
+                                   type: object
++                                pinning:
++                                  description: 'Pinning specifies the CPU Pinning. User can pin vCPU
++                                    to specific pCPU via this model: ["1-2"]. Example: ["1-2","2-3"]
++                                    means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.'
++                                  items:
++                                    type: string
++                                  type: array
+                                 realtime:
+                                   description: Realtime instructs the virt-launcher
+                                     to tune the VMI for lower latency, optional for
+@@ -22428,6 +22477,13 @@ var CRDsValidation map[string]string = map[string]string{
+                                             never cross boundaries of host numa nodes.
+                                           type: object
+                                       type: object
++                                    pinning:
++                                      description: 'Pinning specifies the CPU Pinning. User can pin vCPU
++                                        to specific pCPU via this model: ["1-2"]. Example: ["1-2","2-3"]
++                                        means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.'
++                                      items:
++                                        type: string
++                                      type: array
+                                     realtime:
+                                       description: Realtime instructs the virt-launcher
+                                         to tune the VMI for lower latency, optional
+diff --git a/staging/src/kubevirt.io/api/core/v1/schema.go b/staging/src/kubevirt.io/api/core/v1/schema.go
+index 73e63a29cb..44df23ece7 100644
+--- a/staging/src/kubevirt.io/api/core/v1/schema.go
++++ b/staging/src/kubevirt.io/api/core/v1/schema.go
+@@ -316,6 +316,11 @@ type CPU struct {
+ 	// +optional
+ 	NUMA *NUMA `json:"numa,omitempty"`
+ 
++	// Pinning specifies the CPU Pinning. User can pin vCPU to specific pCPU via this model: ["1-2"].
++	// Example: ["1-2","2-3"] means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.
++	// +optional
++	Pinning []string `json:"pinning,omitempty"`
++
+ 	// IsolateEmulatorThread requests one more dedicated pCPU to be allocated for the VMI to place
+ 	// the emulator thread on it.
+ 	// +optional
+diff --git a/staging/src/kubevirt.io/api/core/v1/schema_swagger_generated.go b/staging/src/kubevirt.io/api/core/v1/schema_swagger_generated.go
+index 5afc9bf97f..cf0b2679cd 100644
+--- a/staging/src/kubevirt.io/api/core/v1/schema_swagger_generated.go
++++ b/staging/src/kubevirt.io/api/core/v1/schema_swagger_generated.go
+@@ -163,6 +163,7 @@ func (CPU) SwaggerDoc() map[string]string {
+ 		"features":              "Features specifies the CPU features list inside the VMI.\n+optional",
+ 		"dedicatedCpuPlacement": "DedicatedCPUPlacement requests the scheduler to place the VirtualMachineInstance on a node\nwith enough dedicated pCPUs and pin the vCPUs to it.\n+optional",
+ 		"numa":                  "NUMA allows specifying settings for the guest NUMA topology\n+optional",
++		"pinning":               "Pinning specifies the CPU Pinning. User can pin vCPU to specific pCPU via this model: [\"1-2\"].\nExample: [\"1-2\",\"2-3\"] means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.\n+optional",
+ 		"isolateEmulatorThread": "IsolateEmulatorThread requests one more dedicated pCPU to be allocated for the VMI to place\nthe emulator thread on it.\n+optional",
+ 		"realtime":              "Realtime instructs the virt-launcher to tune the VMI for lower latency, optional for real time workloads\n+optional",
+ 	}
+diff --git a/staging/src/kubevirt.io/client-go/api/openapi_generated.go b/staging/src/kubevirt.io/client-go/api/openapi_generated.go
+index 347efae62..fe2789a1b 100644
+--- a/staging/src/kubevirt.io/client-go/api/openapi_generated.go
++++ b/staging/src/kubevirt.io/client-go/api/openapi_generated.go
+@@ -14778,6 +14778,20 @@ func schema_kubevirtio_api_core_v1_CPU(ref common.ReferenceCallback) common.Open
+ 							Ref:         ref("kubevirt.io/api/core/v1.NUMA"),
+ 						},
+ 					},
++					"pinning": {
++						SchemaProps: spec.SchemaProps{
++							Description: "Pinning specifies the CPU Pinning. User can pin vCPU to specific pCPU via this model: [\"1-2\"]. Example: [\"1-2\",\"2-3\"] means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.",
++							Type:        []string{"array"},
++							Items: &spec.SchemaOrArray{
++								Schema: &spec.Schema{
++									SchemaProps: spec.SchemaProps{
++										Type:   []string{"string"},
++										Format: "",
++									},
++								},
++							},
++						},
++					},
+ 					"isolateEmulatorThread": {
+ 						SchemaProps: spec.SchemaProps{
+ 							Description: "IsolateEmulatorThread requests one more dedicated pCPU to be allocated for the VMI to place the emulator thread on it.",
+diff --git a/staging/src/kubevirt.io/client-go/apis/core/v1/openapi_generated.go b/staging/src/kubevirt.io/client-go/apis/core/v1/openapi_generated.go
+index 1485df609..2ee9e9d73 100644
+--- a/staging/src/kubevirt.io/client-go/apis/core/v1/openapi_generated.go
++++ b/staging/src/kubevirt.io/client-go/apis/core/v1/openapi_generated.go
+@@ -18996,6 +18996,20 @@ func schema_client_go_apis_core_v1_CPU(ref common.ReferenceCallback) common.Open
+ 							Ref:         ref("kubevirt.io/client-go/apis/core/v1.NUMA"),
+ 						},
+ 					},
++					"pinning": {
++                                                SchemaProps: spec.SchemaProps{
++                                                        Description: "Pinning specifies the CPU Pinning. User can pin vCPU to specific pCPU via this model: [\"1-2\"]. Example: [\"1-2\",\"2-3\"] means vCPU 1 will be pinned to pCPU 2 and vCPU 2 to pCPU 3.",
++                                                        Type:        []string{"array"},
++                                                        Items: &spec.SchemaOrArray{
++                                                                Schema: &spec.Schema{
++                                                                        SchemaProps: spec.SchemaProps{
++                                                                                Type:   []string{"string"},
++                                                                                Format: "",
++                                                                        },
++                                                                },
++                                                        },
++                                                },
++                                        },
+ 					"isolateEmulatorThread": {
+ 						SchemaProps: spec.SchemaProps{
+ 							Description: "IsolateEmulatorThread requests one more dedicated pCPU to be allocated for the VMI to place the emulator thread on it.",
