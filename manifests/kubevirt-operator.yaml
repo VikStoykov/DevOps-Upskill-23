@@ -6794,14 +6794,14 @@ spec:
         - virt-operator
         env:
         - name: VIRT_OPERATOR_IMAGE
-          value: docker.io/vikstoykov/virt-operator:latest
+          value: docker.io/vikstoykov/virt-operator:vs0.2-v0.59.0
         - name: WATCH_NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.annotations['olm.targetNamespaces']
         - name: KUBEVIRT_VERSION
-          value: latest
-        image: docker.io/vikstoykov/virt-operator:latest
+          value: vs0.2-v0.59.0
+        image: docker.io/vikstoykov/virt-operator:vs0.2-v0.59.0
         imagePullPolicy: IfNotPresent
         name: virt-operator
         ports:
