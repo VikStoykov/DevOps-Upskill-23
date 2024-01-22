@@ -39,11 +39,11 @@ and roles to it:
 
 Software is needed on your local computer, if they are already installed, skip this step and start preparing your project directory. The software required includes:
 
-- Python 3.10.12
-- pip3
-- boto (via pip)
-- boto3 (via pip)
-- [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+* Python 3.10.12
+* pip3
+* boto (via pip)
+* boto3 (via pip)
+* [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 
 Required by AWS Ansible module for Ansible:
 
@@ -128,11 +128,11 @@ CALICO_VERSION="3.25.0"
 
 In this section, you can update the versions of the following packages:
 
-- `RUNC` (version 1.1.5)
-- `CONTAINERD` (version 1.6.2)
-- `KUBERNETES` (version 1.26.3)
-- `VIRTCTL` (version v0.41.0)
-- `CALICO` (version 3.25.0)
+* `RUNC` (version 1.1.5)
+* `CONTAINERD` (version 1.6.2)
+* `KUBERNETES` (version 1.26.3)
+* `VIRTCTL` (version v0.41.0)
+* `CALICO` (version 3.25.0)
 Feel free to change these version numbers based on your requirements or the compatibility of the packages.
 
 ### 7. Run Ansible playbook

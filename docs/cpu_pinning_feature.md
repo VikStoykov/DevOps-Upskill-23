@@ -73,11 +73,11 @@ Now check with htop tool host CPU load:
 
 We have checks for:
 
-- Attempting to assign a physical CPU (pCPU) to a non-existent virtual CPU (vCPU).
-- Attempting to assign a virtual CPU (vCPU) to a non-existent physical CPU (pCPU). In such cases, users may receive a log message stating: "impossible to pin < N > on host where we have only < N >" (kubectl logs <pod_name> -c compute), and the CPU will be randomly pinned to one of the available pCPUs (0-3 if there are 4 CPUs on the host machine).
-- Trying to include additional options for CPU pinning. In this situation, users might encounter a log message like: "impossible to pin < N > on VM where we have only< N >" (kubectl logs <pod_name> -c compute), and the CPU will be randomly pinned to one of the available pCPUs (0-3 if there are 4 CPUs on the host machine).
-- Attempting to pin a negative number of vCPUs or pCPUs. Users will receive a log message indicating: "impossible to pin negative number" (kubectl logs <pod_name> -c compute).
-- Trying to pin fewer vCPUs than the total requested. For instance, if the intention is to start a VM with 2 CPUs but only one is assigned due to pinning restrictions, the second vCPU will be randomly pinned to an available CPU.
+* Attempting to assign a physical CPU (pCPU) to a non-existent virtual CPU (vCPU).
+* Attempting to assign a virtual CPU (vCPU) to a non-existent physical CPU (pCPU). In such cases, users may receive a log message stating: "impossible to pin < N > on host where we have only < N >" (kubectl logs <pod_name> -c compute), and the CPU will be randomly pinned to one of the available pCPUs (0-3 if there are 4 CPUs on the host machine).
+* Trying to include additional options for CPU pinning. In this situation, users might encounter a log message like: "impossible to pin < N > on VM where we have only< N >" (kubectl logs <pod_name> -c compute), and the CPU will be randomly pinned to one of the available pCPUs (0-3 if there are 4 CPUs on the host machine).
+* Attempting to pin a negative number of vCPUs or pCPUs. Users will receive a log message indicating: "impossible to pin negative number" (kubectl logs <pod_name> -c compute).
+* Trying to pin fewer vCPUs than the total requested. For instance, if the intention is to start a VM with 2 CPUs but only one is assigned due to pinning restrictions, the second vCPU will be randomly pinned to an available CPU.
 
 ```bash
 domain:
