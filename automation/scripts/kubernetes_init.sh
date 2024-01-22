@@ -71,6 +71,8 @@ function preprare_kubernetes () {
     sudo kubeadm config images pull --cri-socket unix:///run/containerd/containerd.sock --kubernetes-version v${KUBERNETES_VERSION}
 
     wget https://github.com/kubevirt/kubevirt/releases/download/${VIRTCTL_VERSION}/virtctl-${VIRTCTL_VERSION}-linux-amd64
+    sudo mv virtctl-${VIRTCTL_VERSION}-linux-amd64 /usr/bin/virtctl
+    sudo chmod 777 /usr/bin/virtctl
 }
 
 function start_cluster () {
