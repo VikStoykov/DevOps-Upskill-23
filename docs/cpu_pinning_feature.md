@@ -42,7 +42,7 @@ sh-4.4# virsh vcpupin 1
 Finally, we have option to test every CPU with stress-ng tool.
 
 Before CPU load:
-![Alt text](/images/before_pinning.jpg)
+![Alt text](/images/before_pinning.JPG)
 
 Enter to VM and install stress-ng or another tool:
 
@@ -69,7 +69,7 @@ stress-ng: info: [9657] dispatching hogs: 2 cpu
 ```
 
 Now check with htop tool host CPU load:
-![Alt text](/images/after_pinning.jpg)
+![Alt text](/images/after_pinning.JPG)
 
 We have checks for:
 
