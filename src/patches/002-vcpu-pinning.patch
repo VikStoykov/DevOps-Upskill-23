@@ -34,7 +34,7 @@ index 0916d26ea0..6224f44210 100644
  			}
 +		} else if len(vmi.Spec.Domain.CPU.Pinning) > 0 {
 +			if err := vcpu.FormatDomainCPUTune(domain, vmi, c.Topology, c.CPUSet); err != nil {
-+				log.Log.Reason(err).Error("TELCO: failed to pin vCPUs to pCPUs.")
++				log.Log.Reason(err).Error("failed to pin vCPUs to pCPUs.")
 +				return err
 +			}
  		}
@@ -69,13 +69,13 @@ index 43ab4e76df..9101b28d5a 100644
 +		vCpu, _ := strconv.Atoi(strings.Split(cpuPinning[idx], "-")[0])
 +		pCpu, _ := strconv.Atoi(strings.Split(cpuPinning[idx], "-")[1])
 +		if pCpu > runtime.NumCPU()-1 {
-+			logger.Infof("TELCO: impossible to pin %v on host where we have only %v", pCpu, runtime.NumCPU())
++			logger.Infof("impossible to pin %v on host where we have only %v", pCpu, runtime.NumCPU())
 +			continue
 +		} else if vCpu > int(vcpus) {
-+			logger.Infof("TELCO: impossible to pin %v on VM where we have only %v", vCpu, vcpus)
++			logger.Infof("impossible to pin %v on VM where we have only %v", vCpu, vcpus)
 +			continue
 +		} else if vCpu < 0 || pCpu < 0 {
-+			logger.Infof("TELCO: impossible to pin negative number")
++			logger.Infof("impossible to pin negative number")
 +			continue
 +		}
 +
