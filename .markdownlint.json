@@ -7,8 +7,7 @@
         "style": "asterisk"
     },
     "MD013": {
-        "code_blocks": true,
-        "tables": true
+        "line_length": 360
     },
     "MD033": {
         "allowed_elements": [
