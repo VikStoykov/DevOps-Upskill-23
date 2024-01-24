@@ -87,22 +87,33 @@ _For more examples, please refer to the [Documentation](./docs)_
   - [ ] _Value stream mapping_
   - [ ] _Documentation_
   - [X] _Choose source control- GitHub_
+  - [X] _Branching strategies_
 - [x] Choosed building tools
   - _GoLang;_
   - _GitHub Actions;_
   - _Ansible;_
-  - _DockerHub for sharing container images;_
+  - _Docker/DockerHub for sharing container images;_
   - _Snyk and Sonar for source code security source code testing._
 - [x] Choosed languages and tools
   - _GoLang_ 
+- [ ] Secrets management
+  - [x] Ansible vault
+  - [ ] HashiCorp vault
+- [x] Security
+  - [x] Sonarcloud
+  - [x] Snyk
+  - [x] Linters
+  - [x] Gitleaks
 - [ ] Create, build and test
-  - [ ] Build AWS custom AMI (_part of 'Configuration management'_)
-  - [ ] Create _patches for Kubevirt_
-  - [ ] Build _with GitHub and publish to DockerHub_
+  - [x] Build AWS custom AMI (_part of 'Configuration management'_)
+  - [x] Create _patches for Kubevirt_
+  - [x] Build _with GitHub Actions (Building Pipelines) and publish to DockerHub_
   - [ ] Test _on AWS with Terraform_
 - [ ] Run on Kubernetes cluster
-    - [ ] Prometheus statistics
-    - [ ] Cluster with 2 or more workers
+  - [ ] AWS Custom AMI and EC2 instances
+  - [ ] Cluster with 2 or more workers
+- [ ] Observability
+  - [ ] Prometheus statistics
 - [ ] REST API and WEB GUI support
 - [ ] Test the project with one step
 - [ ] Documentation 

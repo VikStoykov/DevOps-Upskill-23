@@ -57,7 +57,7 @@ Downloading https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/c
 amazon.aws (7.2.0) was installed successfully
 ```
 
-### 4. Setup Non Ansible Local Files — Project Directory, SSH Keys
+### 3. Setup Non Ansible Local Files — Project Directory, SSH Keys
 
 #### Generate SSH keys
 
