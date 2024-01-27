@@ -15,6 +15,15 @@ module "kubevirt" {
   aws_instance_ssh_key = var.aws_instance_ssh_key
 }
 
+module "notify" {
+  # What module to use
+  source = "./modules/notify"
+
+  access_key = var.access_key
+  secret_key = var.secret_key
+  ami_key_pair_name = var.ami_key_pair_name
+}
+
 # Print something
 output "instance_master_public_ip" {
   value = module.init.instance_master_public_ip

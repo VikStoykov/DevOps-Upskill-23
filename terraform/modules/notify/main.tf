@@ -94,8 +94,8 @@ resource "aws_iam_role_policy_attachment" "send_cloudwatch_alarms_to_slack_basic
 data "archive_file" "send_cloudwatch_alarms_to_slack" {
   type = "zip"
 
-  source_dir  = "../${path.module}/functions/send-cloudwatch-alarms-to-slack"
-  output_path = "../${path.module}/functions/send-cloudwatch-alarms-to-slack.zip"
+  source_dir  = "/functions/send-cloudwatch-alarms-to-slack"
+  output_path = "/functions/send-cloudwatch-alarms-to-slack.zip"
 }
 
 # Upload ZIP archive with lambda to S3 bucket
