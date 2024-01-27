@@ -11,6 +11,7 @@ variable "secret_key" {  #Todo: uncomment the default value and add your secert 
 variable "ami_key_pair_name" { #Todo: uncomment the default value and add your pem key pair name. Hint: don't write '.pem' exction just the key name
         #default = "mykey" 
 }
+
 variable "number_of_worker" {
         description = "number of worker instances to be join on cluster."
         default = 1
@@ -33,4 +34,29 @@ variable "instance_type" {
 variable "volume_size" {
         description = "Volume size of instance"
         default = "60" #the best type to start k8s with it,
+}
+
+variable "runc_version" {  #Todo: uncomment the default value and add your secert key.
+        description = "The version of runc"
+        default = "1.1.5" 
+}
+
+variable "containerd_version" {  #Todo: uncomment the default value and add your secert key.
+        description = "The version of containerd"
+        default = "1.6.2" 
+}
+
+variable "kubernetes_version" {  #Todo: uncomment the default value and add your secert key.
+        description = "The version of Kubernetes"
+        default = "1.26.3" 
+}
+
+variable "virtctl_version" {  #Todo: uncomment the default value and add your secert key.
+        description = "The version of virtctl"
+        default = "v0.41.0" 
+}
+
+variable "calico_version" {  #Todo: uncomment the default value and add your secert key.
+        description = "The version of Calico"
+        default = "3.25.0" 
 }
