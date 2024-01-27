@@ -199,7 +199,18 @@ resource "aws_instance" "ec2_instance_msr" {
   ]
 
     
-} 
+}
+
+# Add created ec2 instance to ansible inventory
+resource "ansible_host" "ec2_instance_msr" {
+  name   = aws_instance.ec2_instance_msr.public_dns
+  groups = ["nginx"]
+  variables = {
+    ansible_user                 = "ubuntu",
+    ansible_ssh_private_key_file = "/home/victor/.ssh/my_aws",
+    ansible_python_interpreter   = "/usr/bin/python3",
+  }
+}
 
 resource "aws_instance" "ec2_instance_wrk" {
     ami = var.ami_id

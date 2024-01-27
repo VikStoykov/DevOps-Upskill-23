@@ -8,6 +8,24 @@ KUBEVIRT_CR_TEMPLATE="/home/ubuntu/kubevirt-cr.yaml"
 METRIC_SERVER_TEMPLATE="/home/ubuntu/metric_server.yaml"
 DASHBOARD_TEMPLATE="/home/ubuntu/dashboard.yaml"
 
+function wait_for_cluster () {
+    while true; do
+        kubectl get pods -A | grep calico | awk '{print $3}'
+        if [[  $? -eq 0 ]]; then
+            break
+        fi
+        sleep 10
+    done
+
+    while true; do
+        ids=$(kubectl get pods -A | grep calico | awk '{print $3}')
+        if [[  $ids != *"0/1"* ]]; then
+            break
+        fi
+        sleep 10
+    done
+}
+
 function install_kubevirt () {
     if [ -f "$KUBEVIRT_OPERATOR_TEMPLATE" ]; then
         kubectl apply -f $KUBEVIRT_OPERATOR_TEMPLATE
@@ -26,7 +44,6 @@ function install_kubevirt () {
     while true; do
         ids=$(kubectl get pods -A | grep kubevirt | awk '{print $3}')
         if [[  $ids != *"0/1"* ]]; then
-            echo "1"
             break
         fi
         sleep 10
@@ -34,12 +51,12 @@ function install_kubevirt () {
 }
 
 function install_components () {
-    if [ -f "$METRIC_SERVER_TEMPLATE" ]; then
-        kubectl apply -f $METRIC_SERVER_TEMPLATE
-        sleep 10
-    else
-        echo "$METRIC_SERVER_TEMPLATE does not exist."
-    fi
+    # if [ -f "$METRIC_SERVER_TEMPLATE" ]; then
+    #     kubectl apply -f $METRIC_SERVER_TEMPLATE
+    #     sleep 10
+    # else
+    #     echo "$METRIC_SERVER_TEMPLATE does not exist."
+    # fi
 
     if [ -f "$DASHBOARD_TEMPLATE" ]; then
         kubectl apply -f $DASHBOARD_TEMPLATE
@@ -49,6 +66,6 @@ function install_components () {
     fi
 }
 
-
+wait_for_cluster
 install_kubevirt
 install_components

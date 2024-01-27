@@ -1,4 +1,4 @@
-resource "ssh_resource" "example" {
+resource "ssh_resource" "kubernetes" {
   host         = var.instance_public_ip_addr
   private_key  = file(var.aws_instance_ssh_key)
   user         = var.username
@@ -35,15 +35,15 @@ resource "ssh_resource" "example" {
   }
 
   file {
-    content     = file("scripts/apply_k8s_module.sh")
-    destination = "/home/ubuntu/apply_k8s_module.sh"
+    content     = file("scripts/apply_k8s_modules.sh")
+    destination = "/home/ubuntu/apply_k8s_modules.sh"
     permissions = "0700"
   }
 
   timeout = "1m"
 
   commands = [
-    "/usr/bin/bash /home/ubuntu/apply_k8s_module.sh",
+    "/usr/bin/bash /home/ubuntu/apply_k8s_modules.sh &",
   ]
 }
 
