@@ -87,9 +87,18 @@ function start_cluster () {
 
 }
 
+function get_cluster_info () {
+    kubectl config view -o jsonpath=\"{.clusters[*].cluster.server}\" > /tmp/cluster_server.out
+    cat ~/.kube/config > /tmp/kube_config
+
+    aws s3 cp /tmp/cluster_server.out s3://${s3buckit_name};
+    aws s3 cp /tmp/kube_config s3://${s3buckit_name};
+}
+
 install_necessery_components
 preprare_kubernetes
 start_cluster
+get_cluster_info
 
 mkdir /home/ubuntu/config
 touch /home/ubuntu/config/ready
