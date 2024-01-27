@@ -44,7 +44,13 @@ Banches:
 
 Here you can find all tools and languages that are used in this project.
 
-* [![Docker][Docker.com]][Docker-url]
+* Docker
+* Ansible
+* GitHub Workflows
+* Terraform
+* Slack
+* Kubernetes
+* Go/Bash/Python
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -104,14 +110,18 @@ _For more examples, please refer to the [Documentation](./docs)_
   - [x] Snyk
   - [x] Linters
   - [x] Gitleaks
-- [ ] Create, build and test
+- [x] ChatOps
+  - [x] AWS Lambda
+  - [x] AWS CloudWatch
+  - [x] Slack
+- [x] Create, build and test
   - [x] Build AWS custom AMI (_part of 'Configuration management'_)
   - [x] Create _patches for Kubevirt_
   - [x] Build _with GitHub Actions (Building Pipelines) and publish to DockerHub_
-  - [ ] Test _on AWS with Terraform_
-- [ ] Run on Kubernetes cluster
-  - [ ] AWS Custom AMI and EC2 instances
-  - [ ] Cluster with 2 or more workers
+  - [x] Test _on AWS with Terraform_
+- [x] Run on Kubernetes cluster
+  - [x] AWS Custom AMI and EC2 instances
+  - [x] Cluster with 2 or more workers
 - [ ] Observability
   - [ ] Prometheus statistics
 - [ ] REST API and WEB GUI support

@@ -1,3 +1,9 @@
+# Intro
+
+In this tutorial, I'll demonstrate how to set up integration between CloudWatch alarms and a Slack channel. Whenever a new CloudWatch alarm is created, we'll receive a Slack notification confirming the registration of the alarm. To test this integration, we'll configure a CloudWatch alarm to trigger when the CPU usage of an EC2 instance exceeds 80%. Additionally, we'll configure the system to send a notification to Slack when the alarm is resolved.
+
+Here's how it will work: When a CloudWatch alarm is triggered, it will send a message to an SNS topic. This message will then trigger a Lambda function, which will parse the payload containing the alarm message. Based on the current and previous state of the alarm, the Lambda function will generate a custom message and send it to the designated Slack channel.
+
 # How to configure Slack
 
 1. Create profile in Slack
@@ -25,4 +31,35 @@ That's it! You now have the webhook URL for your Slack channel. You can use this
 
 ```curl -X POST --data-urlencode "payload={\"channel\": \"#devops\", \"username\": \"webhookbot\", \"text\": \"This is posted to #my-channel-here and comes from a bot named webhookbot.\", \"icon_emoji\": \":ghost:\"}" https://hooks.slack.com/services/XXX/YYY/ZZZ```
 
+![Alt text](/images/slack_channel.png)
+
+## Run terraform module
+
+```sudo terraform apply -target=module.notify```
+
+![Alt text](/images/chatops.gif)
+
+This will create:
+* IAM role for the SNS with access to CloudWatch
+* Permissions for SNS to write logs to CloudWatch
+* SNS topic to receive notifications from CloudWatch
+* Generate a random string to create a unique S3 bucket
+* Create an S3 bucket to store lambda source code (zip archives)
+* Disable all public access to the S3 bucket
+* Create an IAM role for the lambda function
+* Allow lambda to write logs to CloudWatch
+* Create ZIP archive with a lambda function
+* Upload ZIP archive with lambda to S3 bucket
+* Create lambda function using ZIP archive from S3 bucket
+* Create CloudWatch log group with 2 weeks retention policy
+* Grant access to SNS topic to invoke a lambda function
+* Trigger lambda function when a message is published to "alarms" topic
+
+AWS created Lambda function:
+![Alt text](/images/aws_lambda.png)
+
+AWS CloudWatch:
+![Alt text](/images/aws_cloudwatch.png)
+
+Slack message:
 ![Alt text](/images/slack_channel.png)
