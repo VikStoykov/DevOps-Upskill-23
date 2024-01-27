@@ -203,7 +203,7 @@ resource "aws_instance" "ec2_instance_msr" {
 
 # Create a CloudWatch alarm to trigger an alert when a CPU utilization 
 # for a specific VM is higher than 50 percent
-resource "aws_cloudwatch_metric_alarm" "high_cpu" {
+resource "aws_cloudwatch_metric_alarm" "high_cpu_master" {
   alarm_name  = "EC2 High CPU (${aws_instance.ec2_instance_msr.id})"
   namespace   = "AWS/EC2"
   metric_name = "CPUUtilization"
@@ -219,8 +219,8 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu" {
   alarm_description         = "This metric monitors CPU utilization for the following instance: ${aws_instance.ec2_instance_msr.id}. If the CPU usage exceeds 50%, you'll get an alert."
   insufficient_data_actions = []
 
-  ok_actions    = ["arn:aws:sns:eu-west-1:471112863051:alarms:eee3cd25-4b30-49f3-bea8-149edb8e6237"]
-  alarm_actions = ["arn:aws:sns:eu-west-1:471112863051:alarms:eee3cd25-4b30-49f3-bea8-149edb8e6237"]
+  ok_actions    = ["alarms"]
+  alarm_actions = ["alarms"]
 }
 
 resource "aws_instance" "ec2_instance_wrk" {
@@ -258,22 +258,22 @@ resource "aws_instance" "ec2_instance_wrk" {
 
 # Create a CloudWatch alarm to trigger an alert when a CPU utilization 
 # for a specific VM is higher than 50 percent
-resource "aws_cloudwatch_metric_alarm" "high_cpu" {
-  alarm_name  = "EC2 High CPU (${aws_instance.ec2_instance_wrk.id})"
+resource "aws_cloudwatch_metric_alarm" "high_cpu_worker_zero" {
+  alarm_name  = "EC2 High CPU (${aws_instance.ec2_instance_wrk[0].id})"
   namespace   = "AWS/EC2"
   metric_name = "CPUUtilization"
   # You have to create a separate alarm for each EC2 instance
   dimensions = {
-    InstanceId = aws_instance.ec2_instance_wrk.id
+    InstanceId = aws_instance.ec2_instance_wrk[0].id
   }
   comparison_operator       = "GreaterThanOrEqualToThreshold"
   evaluation_periods        = "1"
   period                    = "300"
   statistic                 = "Average"
   threshold                 = "50"
-  alarm_description         = "This metric monitors CPU utilization for the following instance: ${aws_instance.ec2_instance_wrk.id}. If the CPU usage exceeds 50%, you'll get an alert."
+  alarm_description         = "This metric monitors CPU utilization for the following instance: ${aws_instance.ec2_instance_wrk[0].id}. If the CPU usage exceeds 50%, you'll get an alert."
   insufficient_data_actions = []
 
-  ok_actions    = ["arn:aws:sns:eu-west-1:471112863051:alarms:eee3cd25-4b30-49f3-bea8-149edb8e6237"]
-  alarm_actions = ["arn:aws:sns:eu-west-1:471112863051:alarms:eee3cd25-4b30-49f3-bea8-149edb8e6237"]
+  ok_actions    = ["alarms"]
+  alarm_actions = ["alarms"]
 }

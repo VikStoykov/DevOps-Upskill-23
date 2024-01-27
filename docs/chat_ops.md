@@ -35,6 +35,8 @@ That's it! You now have the webhook URL for your Slack channel. You can use this
 
 ## Run terraform module
 
+```sudo terraform validate```
+```sudo terraform plan -target=module.notify```
 ```sudo terraform apply -target=module.notify```
 
 ![Alt text](/images/chatops.gif)

@@ -46,6 +46,15 @@ resource "ssh_resource" "kubernetes" {
     permissions = "0700"
   }
 
+  timeout = "5m"
+}
+
+resource "ssh_resource" "scripts" {
+  host         = var.instance_public_ip_addr
+  private_key  = file(var.aws_instance_ssh_key)
+  user         = var.username
+  #agent        = false
+
   timeout = "15m"
 
   commands = [
@@ -55,4 +64,8 @@ resource "ssh_resource" "kubernetes" {
 
 output "result" {
   value = try(jsondecode(ssh_resource.kubernetes.result), {})
+}
+
+output "result" {
+  value = try(jsondecode(ssh_resource.scripts.result), {})
 }

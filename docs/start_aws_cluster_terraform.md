@@ -16,3 +16,12 @@ Overall, Terraform simplifies the process of provisioning and managing infrastru
 # Implementation
 
 # How to run
+
+```sudo terraform plan```
+```sudo terraform validate```
+```sudo terraform apply```
+
+![Alt text](/images/terraform.gif)
+
+Instances:
+![Alt text](/images/aws_terraform_instances.png)
