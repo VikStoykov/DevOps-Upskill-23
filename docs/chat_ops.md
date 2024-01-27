@@ -62,4 +62,4 @@ AWS CloudWatch:
 ![Alt text](/images/aws_cloudwatch.png)
 
 Slack message:
-![Alt text](/images/slack_channel.png)
+![Alt text](/images/slack_message.png)
