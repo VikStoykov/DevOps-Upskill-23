@@ -40,7 +40,13 @@ resource "ssh_resource" "kubernetes" {
     permissions = "0700"
   }
 
-  timeout = "1m"
+  file {
+    content     = file("addons/fedora_vmi.yaml")
+    destination = "/home/ubuntu/fedora_vmi.yaml"
+    permissions = "0700"
+  }
+
+  timeout = "15m"
 
   commands = [
     "/usr/bin/bash /home/ubuntu/apply_k8s_modules.sh &",

@@ -1,0 +1,45 @@
+---
+apiVersion: kubevirt.io/v1alpha3
+kind: VirtualMachineInstance
+metadata:
+  labels:
+    special: fedora-vmi
+  name: fedora-vmi
+spec:
+  domain:
+    cpu:
+      pinning: ["0-2", "1-3"]
+      sockets: 1
+      cores: 2
+      threads: 1
+    devices:
+      disks:
+      - disk:
+          bus: virtio
+        name: containerdisk
+      - disk:
+          bus: virtio
+        name: cloudinitdisk
+      interfaces:
+      - masquerade: {}
+        name: default
+      rng: {}
+    machine:
+      type: ""
+    resources:
+      requests:
+        memory: "2048Mi"
+  networks:
+  - name: default
+    pod: {}
+  terminationGracePeriodSeconds: 0
+  volumes:
+  - containerDisk:
+      image: kubevirt/fedora-cloud-container-disk-demo:devel
+    name: containerdisk
+  - cloudInitNoCloud:
+      userData: |-
+        #cloud-config
+        password: fedora
+        chpasswd: { expire: False }
+    name: cloudinitdisk

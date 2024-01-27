@@ -28,3 +28,5 @@ sleep 90
 aws s3 cp s3://${s3buckit_name}/join_command.sh /tmp/.
 chmod +x /tmp/join_command.sh
 bash /tmp/join_command.sh
+
+exit 0

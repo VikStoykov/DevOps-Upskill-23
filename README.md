@@ -65,7 +65,11 @@ This is an example of how to list things you need to use the software and how to
   ```sh
   sudo apt-get update
   sudo apt-get install docker.io
+  sudo apt install software-properties-common
+  sudo add-apt-repository --yes --update ppa:ansible/ansible
+  sudo apt install ansible
   ```
+  Terraform: https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 
 ### Installation
 

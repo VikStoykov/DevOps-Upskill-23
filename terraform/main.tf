@@ -1,5 +1,5 @@
 module "init" {
-  # What module to use
+  # Start instances in AWS
   source = "./modules/init"
 
   access_key = var.access_key
@@ -8,23 +8,26 @@ module "init" {
 }
 
 module "kubevirt" {
-  # What module to use
+  # Apply Kubernetes templates
   source = "./modules/kubevirt"
 
   instance_public_ip_addr = module.init.instance_master_public_ip
   aws_instance_ssh_key = var.aws_instance_ssh_key
 }
 
-module "notify" {
-  # What module to use
-  source = "./modules/notify"
+# Uncomment and apply with this command:
+# sudo terraform apply -target=module.notify
 
-  access_key = var.access_key
-  secret_key = var.secret_key
-  ami_key_pair_name = var.ami_key_pair_name
-}
+# module "notify" {
+#   # Configure ChatOps
+#   source = "./modules/notify"
 
-# Print something
+#   access_key = var.access_key
+#   secret_key = var.secret_key
+#   ami_key_pair_name = var.ami_key_pair_name
+# }
+
+# Print public IPs of master and nodes
 output "instance_master_public_ip" {
   value = module.init.instance_master_public_ip
 }

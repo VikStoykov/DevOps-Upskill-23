@@ -102,3 +102,5 @@ get_cluster_info
 
 mkdir /home/ubuntu/config
 touch /home/ubuntu/config/ready
+
+exit 0

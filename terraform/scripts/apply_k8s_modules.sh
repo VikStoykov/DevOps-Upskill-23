@@ -7,6 +7,7 @@ KUBEVIRT_CR_TEMPLATE="/home/ubuntu/kubevirt-cr.yaml"
 KUBEVIRT_CR_TEMPLATE="/home/ubuntu/kubevirt-cr.yaml"
 METRIC_SERVER_TEMPLATE="/home/ubuntu/metric_server.yaml"
 DASHBOARD_TEMPLATE="/home/ubuntu/dashboard.yaml"
+VMI_TEMPLATE="/home/ubuntu/fedora_vmi.yaml"
 
 function wait_for_cluster () {
     while true; do
@@ -66,6 +67,17 @@ function install_components () {
     fi
 }
 
+function run_vmi () {
+    if [ -f "$VMI_TEMPLATE" ]; then
+        kubectl apply -f $VMI_TEMPLATE
+    else
+        echo "$VMI_TEMPLATE does not exist."
+    fi
+}
+
 wait_for_cluster
 install_kubevirt
 install_components
+run_vmi
+
+exit 0

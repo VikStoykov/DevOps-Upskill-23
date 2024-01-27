@@ -63,3 +63,8 @@ AWS CloudWatch:
 
 Slack message:
 ![Alt text](/images/slack_message.png)
+
+# Thanks to
+
+https://www.youtube.com/watch?v=ox_HJ8w7FPI
+https://antonputra.com/amazon/send-aws-cloudwatch-alarms-to-slack/
