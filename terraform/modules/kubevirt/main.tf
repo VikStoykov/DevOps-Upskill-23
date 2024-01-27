@@ -48,5 +48,5 @@ resource "ssh_resource" "kubernetes" {
 }
 
 output "result" {
-  value = try(jsondecode(ssh_resource.example.result), {})
+  value = try(jsondecode(ssh_resource.kubernetes.result), {})
 }
