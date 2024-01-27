@@ -16,10 +16,34 @@ resource "ssh_resource" "example" {
     permissions = "0700"
   }
 
+  file {
+    content     = file("addons/dashboard.yaml")
+    destination = "/home/ubuntu/dashboard.yaml"
+    permissions = "0700"
+  }
+
+  file {
+    content     = file("addons/metric_server.yaml")
+    destination = "/home/ubuntu/metric_server.yaml"
+    permissions = "0700"
+  }
+
+  file {
+    content     = file("addons/metric_server.yaml")
+    destination = "/home/ubuntu/metric_server.yaml"
+    permissions = "0700"
+  }
+
+  file {
+    content     = file("scripts/apply_k8s_module.sh")
+    destination = "/home/ubuntu/apply_k8s_module.sh"
+    permissions = "0700"
+  }
+
   timeout = "1m"
 
   commands = [
-    "echo '1'",
+    "/usr/bin/bash /home/ubuntu/apply_k8s_module.sh",
   ]
 }
 
