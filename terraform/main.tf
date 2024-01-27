@@ -9,9 +9,9 @@ module "init" {
 
 # Print something
 output "instance_master_public_ip" {
-  value = module.init.instance_msr_public_ip
+  value = module.init.instance_master_public_ip
 }
 
 output "instance_workers_public_ip" {
-  value = module.init.instance_msr_public_ip
+  value = module.init.instance_workers_public_ip
 }

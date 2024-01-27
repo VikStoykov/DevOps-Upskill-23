@@ -174,7 +174,7 @@ resource "aws_instance" "ec2_instance_msr" {
     tags = {
         Name = "k8s_master_1"
     }
-    user_data_base64 = base64encode("${templatefile("../../scripts/install_k8s_master.sh", {
+    user_data_base64 = base64encode("${templatefile("scripts/install_k8s_master.sh", {
 
     access_key = var.access_key
     private_key = var.secret_key
@@ -211,7 +211,7 @@ resource "aws_instance" "ec2_instance_wrk" {
     tags = {
         Name = "k8s_worker_${count.index + 1}"
     }
-    user_data_base64 = base64encode("${templatefile("../../scripts/install_k8s_worker.sh", {
+    user_data_base64 = base64encode("${templatefile("scripts/install_k8s_worker.sh", {
 
     access_key = var.access_key
     private_key = var.secret_key
