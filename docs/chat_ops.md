@@ -66,6 +66,9 @@ AWS CloudWatch:
 Slack message:
 ![Alt text](/images/slack_message.png)
 
+Slack message on successfull deployment:
+![Alt text](/images/tommy_meow.png)
+
 # Thanks to
 
 https://www.youtube.com/watch?v=ox_HJ8w7FPI

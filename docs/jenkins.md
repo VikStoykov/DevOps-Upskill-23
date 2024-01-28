@@ -35,3 +35,5 @@ Active: active (running) since Tue 2018-11-13 16:19:01 +03; 4min 57s ago
 ```
 
 ## My dashboard
+
+![Alt text](/images/jenkins_dashboard.png)
