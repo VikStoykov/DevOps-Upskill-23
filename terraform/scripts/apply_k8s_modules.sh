@@ -20,7 +20,7 @@ function wait_for_cluster () {
 
     while true; do
         ids=$(kubectl get pods -A | grep calico | awk '{print $3}')
-        if [[  $ids != *"0/1"* ]]; then
+        if [[  $ids != "" ]] && [[ $ids != *"0/1"* ]]; then
             break
         fi
         sleep 10
