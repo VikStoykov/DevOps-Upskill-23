@@ -11,11 +11,15 @@ VMI_TEMPLATE="/home/ubuntu/fedora_vmi.yaml"
 
 function wait_for_cluster () {
     while true; do
-        kubectl get pods -A > /dev/null 2>&1 
-        if [[  $? -eq 0 ]]; then
-            break
+        if [ ! -f "/home/ubuntu/config/ready" ]; then
+            sleep 10
+        else
+            sleep 30
+            kubectl get pods -A > /dev/null 2>&1 
+            if [[  $? -eq 0 ]]; then
+                break
+            fi
         fi
-        sleep 10
     done
 
     while true; do
@@ -68,8 +72,15 @@ function install_components () {
 }
 
 function run_vmi () {
+    while true; do
+        kubectl get nodes | grep k8s-worker-1 > /dev/null 2>&1 
+        if [[  $? -eq 0 ]]; then
+            break
+        fi
+        sleep 90
+    done
+
     if [ -f "$VMI_TEMPLATE" ]; then
-        sleep 10
         kubectl apply -f $VMI_TEMPLATE
     else
         echo "$VMI_TEMPLATE does not exist."

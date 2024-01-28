@@ -10,6 +10,31 @@ spec:
     developerConfiguration:
       useEmulation: true
       featureGates: []
+      logVerbosity:
+        virtLauncher: 1
+        virtHandler: 1
+        virtController: 1
+        virtAPI: 1
+        virtOperator: 1
   customizeComponents: {}
   imagePullPolicy: IfNotPresent
+  infra:
+    nodePlacement:
+      nodeSelector:
+        kubernetes.io/os: linux
+        node-role.kubernetes.io/control-plane: ""
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+  workloads:
+    nodePlacement:
+      nodeSelector:
+        kubernetes.io/os: linux
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
   workloadUpdateStrategy: {}
+  monitorNamespace: monitoring
+  monitorAccount: prometheus-k8s

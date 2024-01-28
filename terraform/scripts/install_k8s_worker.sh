@@ -23,7 +23,7 @@ export ipaddr=`ip address|grep eth0|grep inet|awk -F ' ' '{print $2}' |awk -F '/
 #systemctl restart containerd
 
 # to insure the join command start when the installion of master node is done.
-sleep 90
+sleep 300
 
 aws s3 cp s3://${s3buckit_name}/join_command.sh /tmp/.
 chmod +x /tmp/join_command.sh
