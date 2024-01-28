@@ -15,6 +15,21 @@ Overall, Terraform simplifies the process of provisioning and managing infrastru
 
 # Implementation
 
+![Alt text](/images/terraform_schematic.png)
+
+In our infrastructure setup, we leverage three distinct Terraform modules, each serving a crucial role in orchestrating the deployment and management of our resources:
+
+__Main Init Module__
+This module serves as the cornerstone of our cluster initialization process. It orchestrates the provisioning of two EC2 instances within the AWS environment, utilizing cloud-init scripts to tailor their configurations precisely to our specifications. These instances serve as the foundational elements upon which our entire infrastructure is built, providing the necessary compute resources for our workloads.
+
+__Kubernetes Templates Module__
+The Kubernetes Templates module is responsible for the deployment and configuration of Kubernetes resources essential for our environment. This includes the deployment of kubevirt, a Kubernetes extension for managing virtual machines, and the Kubernetes dashboard, providing a centralized interface for monitoring and managing our Kubernetes clusters. By automating the deployment of these resources through templated configurations, we ensure consistency and reliability across our Kubernetes infrastructure.
+
+__ChatOps Module__
+Our ChatOps module represents an innovative approach to enhancing operational efficiency through seamless integration with Slack. This module not only provisions a CloudWatch instance for monitoring our infrastructure but also establishes a bi-directional communication channel between CloudWatch and our Slack server. This integration enables automated notifications, alerts, and even interactive commands within our Slack workspace, empowering our team with real-time insights and actions to streamline collaboration and decision-making processes.
+
+Through the orchestration of these Terraform modules, we achieve a comprehensive and automated infrastructure setup that lays the foundation for efficient, reliable, and collaborative operations within our environment. From the initial provisioning of resources to ongoing management and communication, Terraform serves as a powerful tool for ensuring the resilience and agility of our infrastructure.
+
 # How to run
 
 ```sudo terraform plan```

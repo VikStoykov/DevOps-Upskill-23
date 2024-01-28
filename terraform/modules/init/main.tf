@@ -219,8 +219,8 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu_master" {
   alarm_description         = "This metric monitors CPU utilization for the following instance: ${aws_instance.ec2_instance_msr.id}. If the CPU usage exceeds 50%, you'll get an alert."
   insufficient_data_actions = []
 
-  ok_actions    = ["alarms"]
-  alarm_actions = ["alarms"]
+  ok_actions    = ["arn:aws:sns:eu-west-1:471112863051:alarms"]
+  alarm_actions = ["arn:aws:sns:eu-west-1:471112863051:alarms"]
 }
 
 resource "aws_instance" "ec2_instance_wrk" {
@@ -274,6 +274,6 @@ resource "aws_cloudwatch_metric_alarm" "high_cpu_worker_zero" {
   alarm_description         = "This metric monitors CPU utilization for the following instance: ${aws_instance.ec2_instance_wrk[0].id}. If the CPU usage exceeds 50%, you'll get an alert."
   insufficient_data_actions = []
 
-  ok_actions    = ["alarms"]
-  alarm_actions = ["alarms"]
+  ok_actions    = ["arn:aws:sns:eu-west-1:471112863051:alarms"]
+  alarm_actions = ["arn:aws:sns:eu-west-1:471112863051:alarms"]
 }

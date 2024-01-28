@@ -18,14 +18,14 @@ module "kubevirt" {
 # Uncomment and apply with this command:
 # sudo terraform apply -target=module.notify
 
-# module "notify" {
-#   # Configure ChatOps
-#   source = "./modules/notify"
+module "notify" {
+  # Configure ChatOps
+  source = "./modules/notify"
 
-#   access_key = var.access_key
-#   secret_key = var.secret_key
-#   ami_key_pair_name = var.ami_key_pair_name
-# }
+  access_key = var.access_key
+  secret_key = var.secret_key
+  ami_key_pair_name = var.ami_key_pair_name
+}
 
 # Print public IPs of master and nodes
 output "instance_master_public_ip" {

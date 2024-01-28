@@ -1,6 +1,6 @@
 #!/bin/bash
-set -e
-set -x
+exec 1> >(exec logger -s -t $(basename $0)) 2>&1
+set -o xtrace
 
 KUBEVIRT_OPERATOR_TEMPLATE="/home/ubuntu/kubevirt-operator.yaml"
 KUBEVIRT_CR_TEMPLATE="/home/ubuntu/kubevirt-cr.yaml"
@@ -11,7 +11,7 @@ VMI_TEMPLATE="/home/ubuntu/fedora_vmi.yaml"
 
 function wait_for_cluster () {
     while true; do
-        kubectl get pods -A | grep calico | awk '{print $3}'
+        kubectl get pods -A > /dev/null 2>&1 
         if [[  $? -eq 0 ]]; then
             break
         fi
@@ -52,12 +52,12 @@ function install_kubevirt () {
 }
 
 function install_components () {
-    # if [ -f "$METRIC_SERVER_TEMPLATE" ]; then
-    #     kubectl apply -f $METRIC_SERVER_TEMPLATE
-    #     sleep 10
-    # else
-    #     echo "$METRIC_SERVER_TEMPLATE does not exist."
-    # fi
+    if [ -f "$METRIC_SERVER_TEMPLATE" ]; then
+        kubectl apply -f $METRIC_SERVER_TEMPLATE
+        sleep 10
+    else
+        echo "$METRIC_SERVER_TEMPLATE does not exist."
+    fi
 
     if [ -f "$DASHBOARD_TEMPLATE" ]; then
         kubectl apply -f $DASHBOARD_TEMPLATE
@@ -77,7 +77,7 @@ function run_vmi () {
 
 wait_for_cluster
 install_kubevirt
-install_components
+#install_components
 run_vmi
 
 exit 0

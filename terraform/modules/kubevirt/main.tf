@@ -60,12 +60,14 @@ resource "ssh_resource" "scripts" {
   commands = [
     "/usr/bin/bash /home/ubuntu/apply_k8s_modules.sh &",
   ]
+
+  depends_on = [ssh_resource.kubernetes]
 }
 
-output "result" {
+output "result_kubernetes" {
   value = try(jsondecode(ssh_resource.kubernetes.result), {})
 }
 
-output "result" {
+output "result_scripts" {
   value = try(jsondecode(ssh_resource.scripts.result), {})
 }
