@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+    
+    environment {
+        TF_VERSION = "1.7.1" // Define the Terraform version
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/VikStoykov/DevOps-Upskill-23.git'
+            }
+        }
+        
+        stage('Terraform Version') {
+            steps {
+                script {
+                    sh "terraform --version"
+                }
+            }
+        }
+        
+        stage('Terraform Init') {
+            steps {
+                script {
+                    sh "cd terraform/ && terraform init"
+                }
+            }
+        }
+        
+        stage('Terraform Validate') {
+            steps {
+                script {
+                    sh "cd terraform/ && terraform validate"
+                }
+            }
+        }
+        
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    sh "cd terraform/ && terraform plan"
+                }
+            }
+        }
+        
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    sh "cd terraform/ && terraform apply -auto-approve"
+                }
+            }
+        }
+        
+        stage('Terraform Destroy') {
+            steps {
+                script {
+                    sh "cd terraform/ && terraform destroy -auto-approve"
+                }
+            }
+        }
+        
+    }
+}

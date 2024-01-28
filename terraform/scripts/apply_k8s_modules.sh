@@ -92,4 +92,6 @@ install_kubevirt
 #install_components
 run_vmi
 
+#curl -X POST --data-urlencode "payload={\"channel\": \"#devops\", \"username\": \"tommy\", \"text\": \"Meow...Meows... Kubevirt VM is deployed successfully.\", \"icon_emoji\": \":smirk_cat:\"}" https://hooks.slack.com/services/XX/YY/ZZ
+
 exit 0
