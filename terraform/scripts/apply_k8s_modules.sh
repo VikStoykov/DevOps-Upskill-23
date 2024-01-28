@@ -47,7 +47,7 @@ function install_kubevirt () {
         if [[  $ids != *"0/1"* ]]; then
             break
         fi
-        sleep 10
+        sleep 30
     done
 }
 
@@ -69,6 +69,7 @@ function install_components () {
 
 function run_vmi () {
     if [ -f "$VMI_TEMPLATE" ]; then
+        sleep 10
         kubectl apply -f $VMI_TEMPLATE
     else
         echo "$VMI_TEMPLATE does not exist."
