@@ -11,7 +11,7 @@
   [![Kubevirt build](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_kubevirt.yml/badge.svg)](https://github.com/VikStoykov/DevOps-Upskill-23/actions/workflows/build_and_push_kubevirt.yml)
 
   <p align="center">
-    Public training repository for Telerik DevOps-Upskill program - 2023 v1.0
+    Public training repository for Telerik DevOps-Upskill program - 2023 v1.1
     <br />
     <a href="docs/"><strong>Explore the docs »</strong></a>
     <br />
