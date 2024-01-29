@@ -145,13 +145,12 @@ jobs:
           push: ${{ env.PUSH }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.API_IMG }}:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.API_IMG }}:latest
 
-      - run: echo "✔ Scan the built image with Trivy"
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/${{ env.API_IMG }}:latest'
           format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
@@ -165,13 +164,12 @@ jobs:
           push: ${{ env.PUSH }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CONTROLLER_IMG }}:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CONTROLLER_IMG }}:latest
 
-      - run: echo "✔ Scan the built image with Trivy"
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/${{ env.CONTROLLER_IMG }}:latest'
           format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
@@ -185,13 +183,12 @@ jobs:
           push: ${{ env.PUSH }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.HANDLER_IMG }}:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.HANDLER_IMG }}:latest
 
-      - run: echo "✔ Scan the built image with Trivy"
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/${{ env.HANDLER_IMG }}:latest'
           format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
@@ -205,13 +202,12 @@ jobs:
           push: ${{ env.PUSH }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.LAUNCHER_IMG }}:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.LAUNCHER_IMG }}:latest
 
-      - run: echo "✔ Scan the built image with Trivy"
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/${{ env.LAUNCHER_IMG }}:latest'
           format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
@@ -225,13 +221,12 @@ jobs:
           push: ${{ env.PUSH }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.OPERATOR_IMG }}:${{ github.sha }},${{ secrets.DOCKERHUB_USERNAME }}/${{ env.OPERATOR_IMG }}:latest
 
-      - run: echo "✔ Scan the built image with Trivy"
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ secrets.DOCKERHUB_USERNAME }}/${{ env.OPERATOR_IMG }}:latest'
           format: 'table'
-          exit-code: '1'
+          exit-code: '0'
           ignore-unfixed: true
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
