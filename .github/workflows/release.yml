@@ -7,8 +7,9 @@ on:
 
 jobs:
   build:
-    name: Publish binaries
+    name: Publish templates
     runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
     - name: Checkout code
