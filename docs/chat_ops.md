@@ -42,6 +42,7 @@ That's it! You now have the webhook URL for your Slack channel. You can use this
 ![Alt text](/images/chatops.gif)
 
 This will create:
+
 * IAM role for the SNS with access to CloudWatch
 
 * Permissions for SNS to write logs to CloudWatch

@@ -5,6 +5,7 @@ Terraform is an open-source infrastructure as code (IaC) tool developed by Hashi
 Unlike traditional configuration management tools, Terraform focuses on creating and managing infrastructure resources in a predictable and reproducible manner. It provides a unified workflow for provisioning infrastructure, making it easier to manage complex environments and automate infrastructure deployment.
 
 Key features of Terraform include:
+
 1. Declarative Configuration: Terraform uses a declarative configuration language called HashiCorp Configuration Language (HCL) to define infrastructure resources and their dependencies. This allows users to describe the desired state of their infrastructure without specifying the sequence of operations required to achieve it.
 
 2. Infrastructure as Code (IaC): Terraform treats infrastructure as code, enabling infrastructure configurations to be versioned, tested, and managed alongside application code. This makes it easier to collaborate with teams, track changes, and maintain consistency across environments.
