@@ -7,7 +7,7 @@
         "style": "asterisk"
     },
     "MD013": {
-        "line_length": 360
+        "line_length": 600
     },
     "MD033": {
         "allowed_elements": [

@@ -4,7 +4,7 @@ In this tutorial, I'll demonstrate how to set up integration between CloudWatch 
 
 Here's how it will work: When a CloudWatch alarm is triggered, it will send a message to an SNS topic. This message will then trigger a Lambda function, which will parse the payload containing the alarm message. Based on the current and previous state of the alarm, the Lambda function will generate a custom message and send it to the designated Slack channel.
 
-# How to configure Slack
+## How to configure Slack
 
 1. Create profile in Slack
 2. Get a Slack channel webhook URL
@@ -43,18 +43,31 @@ That's it! You now have the webhook URL for your Slack channel. You can use this
 
 This will create:
 * IAM role for the SNS with access to CloudWatch
+
 * Permissions for SNS to write logs to CloudWatch
+
 * SNS topic to receive notifications from CloudWatch
+
 * Generate a random string to create a unique S3 bucket
+
 * Create an S3 bucket to store lambda source code (zip archives)
+
 * Disable all public access to the S3 bucket
+
 * Create an IAM role for the lambda function
+
 * Allow lambda to write logs to CloudWatch
+
 * Create ZIP archive with a lambda function
+
 * Upload ZIP archive with lambda to S3 bucket
+
 * Create lambda function using ZIP archive from S3 bucket
+
 * Create CloudWatch log group with 2 weeks retention policy
+
 * Grant access to SNS topic to invoke a lambda function
+
 * Trigger lambda function when a message is published to "alarms" topic
 
 AWS created Lambda function:
@@ -69,7 +82,7 @@ Slack message:
 Slack message on successfull deployment:
 ![Alt text](/images/tommy_meow.png)
 
-# Thanks to
+## Thanks to
 
-https://www.youtube.com/watch?v=ox_HJ8w7FPI
-https://antonputra.com/amazon/send-aws-cloudwatch-alarms-to-slack/
+[Video](https://www.youtube.com/watch?v=ox_HJ8w7FPI)
+[Document](https://antonputra.com/amazon/send-aws-cloudwatch-alarms-to-slack/)
