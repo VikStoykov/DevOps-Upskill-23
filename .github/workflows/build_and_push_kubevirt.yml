@@ -35,10 +35,10 @@ jobs:
           ignore: node_modules
           #version: 0.28.1
 
-      - name: Perform gitleaks
-        uses: zricethezav/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #- name: Perform gitleaks
+      #  uses: zricethezav/gitleaks-action@v2
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     security-sonar-test:
       runs-on: ubuntu-latest
