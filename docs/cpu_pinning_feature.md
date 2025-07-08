@@ -5,6 +5,7 @@ KubeVirt inherently supports CPU pinning for NUMA hardware, but it doesn't provi
 To manually set CPU pinning, include the cpuPinning: ```["0-2", "1-3"]``` configuration. In this setting, vCPU 0 is mapped to pCPU 2, and vCPU 1 is mapped to pCPU 3. To clarify, in a scenario with a VM or hardware device having 2 cores and 2 threads per core (resulting in a total of 4 CPUs), core counting starts from zero.
 
 Example:
+
 |Core|Number|
 |-|-|
 |1|0|
